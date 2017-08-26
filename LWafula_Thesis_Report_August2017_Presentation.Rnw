@@ -238,7 +238,7 @@ $\diamond$ Why? \\ \vspace{1mm}
 \begin{frame}
 \underline{1. Transformation effect on features distributions} \\
 \centering
-\includegraphics[height=8.5cm,width=9cm]{data1_distr_overlaps_pre_post_transformation.pdf}
+\includegraphics[height=8.5cm,width=9cm]{data1_distr_setdiff_pre_post_transformation_9to12.PDF}
 \end{frame}
 
 \begin{frame}
