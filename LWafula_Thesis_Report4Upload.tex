@@ -1,0 +1,1518 @@
+\documentclass[11pt]{article}
+\renewcommand{\baselinestretch}{1.1}
+
+%%% Add packages here
+	\usepackage{graphics}
+	\usepackage{ifoddpage}
+	\usepackage{pifont}
+	\usepackage{lscape}
+	\usepackage{amsfonts}
+	\usepackage{siunitx}
+	\usepackage{amsmath}
+	\usepackage{amsthm}
+	\usepackage{amssymb}
+	\usepackage{latexsym}
+	\usepackage{color}
+	\usepackage{verbatim}
+	\usepackage{float}
+	\usepackage{fancyhdr}
+	\usepackage{fancybox}
+	\usepackage{booktabs}
+	\usepackage{longtable}
+	\usepackage[export]{adjustbox}
+	\usepackage{Sweave}
+	\usepackage{cite}
+	\usepackage{enumerate}
+	 \usepackage{wrapfig, framed, caption}
+	 \usepackage{graphicx}
+\usepackage{caption}
+\usepackage{enumerate}
+\usepackage{lscape}
+\usepackage{subcaption}
+\usepackage{tabularx}% <-- added
+\usepackage[export]{adjustbox}% <-- added
+\usepackage{array}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{tabulary}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\usepackage[compact]{titlesec}
+\titlespacing{\section}{0pt}{0pt}{0pt}
+
+%%% Margins
+\addtolength{\oddsidemargin}{-.50in}
+\addtolength{\evensidemargin}{-.50in}
+\addtolength{\textwidth}{1.0in}
+\addtolength{\topmargin}{-.40in}
+\addtolength{\textheight}{0.80in}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{1em}
+
+%%% Header
+	\pagestyle{fancy}
+	\chead{\groupname}
+	\rhead{}
+	\lhead{}
+	\cfoot{\thepage}
+	\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\groupname}{Master's Thesis: VST for image-based compound profiling features}
+\begin{document}
+\input{LWafula_Thesis_Report4Upload-concordance}
+\input{LWafula_Thesis_Report-concordance}
+\clearpage\thispagestyle{empty}
+
+\begin{flushleft}
+	\textbf{\Large{
+	2016$\bullet$2017 \\
+	FACULTY OF SCIENCES \\
+	Master of Statistics	
+	}} \\ [2cm]
+	% title
+	\textbf{\huge{Master's thesis}} \\ 
+	\textbf{{Variance-stabilizing transformations for image-based compound profiling features}} \\ [2cm]
+\end{flushleft}
+
+\vspace*{1cm}
+\textbf{\large{Supervisors:}}\\
+Prof. Dr. Ziv SHKEDY \\
+Prof. Dr. Nolen Joy PERUALILA \\
+Dr. Marjolein CRABBE \\
+Dr. Steffen JAENSCH
+
+\vspace*{2cm}
+\textbf{\large{Wafula LEonard }}\\
+\textit{\textbf{\large{Thesis presented in fulfillment of the requirements for the degree of Master of
+Statistics}}} \\ [1cm]
+
+\begin{figure}[!h]
+\includegraphics[width=40mm]{UHasseltlogo.jpg}
+\end{figure}
+\pagenumbering{roman}
+\clearpage
+\section*{Abstract}
+\par{\textbf{Background}: Image-based multiparametric compound profiling is an important biological method for characterizing compounds in drug research and discovery. Many highly correlated and non-normally distributed features are often extracted and used to differentiate these compounds. Yet multivariate compound discrimination techniques are not optimal when applied directly due to redundancy in features extracted and lack of homogeneity in variance. A range of glog transformations were applied to stabilize the variance and assess effects of these transformations on separation between treatment replicates and non-replicates. A treatment was defined as a compound at a specific concentration. Investigations on effects of transformations on the proportion of actively-called treatments and whether treatments separation was better when transformations were applied on single-cell or aggregated data were also done.} 
+\par{\textbf{Methods}: Data sets from colon and liver cancer cell lines were used in this study. Two approaches - the Hotelling's two-sample T$^2$ statistic and the Area Under the ROC curve - were used to assess the effects of glog transformations on separation between treatment replicates and non-replicates. Transformations that led to positive shifts in distributions of T$^2$ statistics and/or higher AUC values were concluded as having improved treatment separation compared to when data was untransformed. }
+\par{\textbf{Results}: Here, effects of glog transformations were investigated on actively-called treatments present before and after every given transformation. For both cell lines, a few transformations led to marginal improvements in treatments separation. These observed improvements were largely insignificant. Most transformations resulted in treatments separation that was indifferent to results obtained before transformation. Effect of transformation on proportion of actively-called treatments was data-dependent. In the first data, the proportion was in general lower than proportion obtained pre-transformation. On the contrary, the proportion of actively-called treatments in the second data set was always higher than the proportion observed pre-transformation. Across both data sets, a lower(higher) proportion resulted from a higher(lower) number of selected features. Both approaches failed to identify preference between applying a transformation at cell- or well-level.}
+\par{\textbf{Conclusion}: Both approaches showed that performing glog transformations generally failed to improve treatments separation beyond results obtained before transformation. Further, our results determined that the proportion of actively-called treatments was data-dependent. Finally, our study could not establish whether transformations improved separation between treatment replicates and non-replicates better when applied at cell- or well-level. }
+\par{\textbf{Keywords}: High content imaging, Glog transformation, Hotelling's T$^2$, AUC}
+\clearpage
+\tableofcontents
+\clearpage
+% \section*{Dedication0}
+% \par{This Thesis is written as a gift to my late parents (Rose Nanjala Masibo and Joackim Maaya Barasa), my grand-parents (Patrick and Petronila (R.I.P)  Masibo), our mum Lilian Masibo (and the love of your life John Salala), my super brothers (Oliver, Augustine, Lewis, Paul) and sisters (Sylvia, Cynthia), and my ever-present extended family and friends for your belief in me and never-ending support both within and without the academic circles. Kindly receive my appreciation in one package since listing you wonderful people here is beyond the bounds of possibility.}
+% \section*{Dedication1}
+% \par{To you my *5qp, this Thesis is dedicated to you! When I look at you, I see the sum total of every woman still breathing. You are capable of anything and truly worthy of everything. A man couldn't wish to be luckier. You can't imagine the numerous ways having you just stabilizes me. You are my star, my love, my partner, my best friend, my confidante, a gale force wind at my back, my island in rough seas. 4reverQP.}
+\section*{Dedication}
+\par{This Thesis is written as a gift to my superb family and friends and, my academic and career mentors for your belief in my abilities and never-ending support both within and without the academic circles. Kindly receive my appreciation in one package since listing you wonderful people here is beyond the bounds of possibility.}
+\section*{Acknowledgements}
+\par{To GOD and my family, \textit{asanteni sana}.}
+\par{I deeply appreciate my internal supervisors Prof. Dr. Ziv SHKEDY and Prof. Dr. Nolen Joy PERUALILA for effortlessly triggering ideas and providing alternatives in the course of the project. It is incredible how at peace you are with statistics and the wonders it can inform.  I was blessed to have a patient and motivated team of Dr. Marjolein CRABBE and Dr. Steffen JAENSCH as my external supervisors. You were excellent and vastly knowledgeable in the subject matter. You always seemed to have all the time in the world to wade me through any storm I had. Your eye for detail is beyond reproach.  Thank you all for not just listening to my words and reading my mails and drafts, but especially hearing and replying to the spaces in them! You have been a gale-force-wind at my back.}
+\par{I also wish to acknowledge the academic support I got from all lecturers at UHasselt and the Flemish government for materially supporting my studies and stay through the VLIR-OUS program. Credit to my classmates for all the splendid fun we had and for providing real options whenever any of us was stuck.}
+\begin{flushright}
+LEonard
+\end{flushright}
+% \clearpage
+ %  \listoffigures
+ %  \listoftables
+\clearpage
+\pagenumbering{arabic}
+\section{Background}
+\subsection{Introduction} \label{intro}
+\par{Image-based multi-parametric compound profiling is an important biological method for distinguishing compounds in the drug discovery chain using a range of features extracted from image-based assays by applying High Throughput Microscopy (HTM) \cite{Price2002, Lin2007,Reisen2015}. In HTM, a cell is identified by partitioning an image into regions using a computer image analysis algorithm. These cellular regions then provide information on intensity, texture and spatial distribution of intracellular biomarkers as well as the shape, quantity and geometry of cells. There has been an increased interest in multi-parametrically characterizing compounds at an early stage due to a rising need to understand how compounds induce their desired properties and describe their mechanisms of action, how to preferentially identify highly specific compounds from a pool of compounds that have a considerable activity on isolated biological target molecules and how to identify as early as possible any likely undesired effects (for instance toxicity detection) of compounds on cells and cellular activity \cite{Lang2006,Reisen2015,Perlman2004}. Multi-parametric  compound profiling methods, unlike univariate methods, factor in possible dependencies among features and often lead to more precise characterization, comparison and prediction of compound effects on cells \cite{Loo2007, Laufer2013}.}
+
+\par{Whereas a richer set of features is vital in discriminating between compounds and predicting modes of action of compounds by examining compound feature profiles relative to profiles of compounds with known mechanisms of action \cite{Reisen2015}, there is need to limit feature sets to only features that discriminate as many compounds as possible without being highly correlated among themselves \cite{DeJay2013, Ding2005}. The problem of dimensional reduction of features is a common difficulty since HTM outputs data on numerous features most of which are usually highly similar in describing respective compound modes of action. Most features extracted from images also exhibit non-normal distributions which renders application of multivariate methods dependent on normality less optimal. Multivariate techniques for assessing possible relationships amongst groups of compounds are highly dependent on data variability \cite{Jagdish1982, wichern2007, Parsons2007} and thus necessitate appropriate handling of the data's variance structure to maximize on power of results obtained. Briefly, variation between a pair of compound samples can be categorized as either 'technical' or 'biological' \cite{Churchill2002,VandenBerg2006,Parsons2007} with technical variability being associated with procedures performed during an experiment for example sample preparation, extraction, labeling and analytical measurements. Technical variability blurs discrimination of compound samples and samples from other compounds. Therefore to maximize on separation between samples of compounds, this component of variation needs to be minimized. Biological variability refers to differences in feature(s) measurements from a particular cell line due to differences in modes of action induced by different compounds. Biological variability rightly differentiates compounds and methods aimed at classifying compounds target to maximize this component of variation.} 
+\par{To multi-parametrically discriminate compounds therefore, it is necessary to both select a set of features that is efficient in discriminating compounds, and particularly for this report, apply transformations aimed at maximizing separation between compounds samples. These transformations target at minimizing the dispensable effects of technical variability while concurrently optimizing compounds separation through their biological variability \cite{Churchill2002,VandenBerg2006,Parsons2007,Purohit2004}. Such transformations (and data pre-processing techniques ) are referred to as Variance Stabilizing Transformations (VST). VST techniques primarily transform data such that simple analysis methods like linear regression can be applied without violating underlying assumptions. Key amongst these normality assumptions is homoscedasticity which essentially implies independence between the mean and variance functions. High content imaging data, similar to other high throughput data, often present a lack of independence between their mean and standard deviation \cite{haney2014rapid} and thus inherently require variance stabilization to maximize on respective compounds separation. VSTs are also applied to improve graphical exploration of data by rescaling it so that visualization is much clearer.}
+
+\par{Variance stabilizing transformations come in different forms with the most commonly applied ones being auto-scaling, Pareto scaling \cite{VandenBerg2006}, Yeo-Johnson power transformations \cite{yeo2000, Weisberg2001} and the generalized log transformation (glog) \cite{Huber2002, durbin2002variance, Rocke2003, Munson2001, Rocke2001}. The ability of each of these transformations to improve compounds classification by stabilizing data variability and retaining the necessary biological variability varies. The glog transformation has been investigated and shown to lead to better variance stabilization compared to auto-scaled and Pareto-scaled data across a set of metabolomics data \cite{Parsons2007}. Noteworthy, improved classification and clustering resulting from effective variance stabilization was shown when a glog transformation was applied on metabolomics data \cite{Purohit2004}. As finely noted in \cite{Parsons2007}, the major strength of the glog transformation is its ability to minimize technical variability among technical replicates, which is a strength that auto-scaling and Pareto-scaling lack. In fact, auto-scaling collapses all variability in the data to unity and therefore makes all biological variability in the data uniform. }
+
+\par{Multiparametric high content imaging is a rich tool in research, discovery and characterization of compounds at an early stage in the drug discovery pipeline \cite{Price2002, Lang2006, Loo2007, Lin2007} whose importance has been greatly documented \cite{Reisen2015, Perlman2004}. This report explored the possibility of applying variance stabilizing characteristics of transformations on high content data to promote better profiling of compounds using image-based multi-parametric phenotypes. We investigated effectiveness of transformations on two sets of disparate data categorized based on cancer cell lines from which they were extracted. The glog transformation was applied in this study since it has been shown to lead to better classification and clustering results when applied on other data sets \cite{Purohit2004, Parsons2007} and also compares favourably to other commonly applied variance stabilizing transformations \cite{Parsons2007}. We performed glog transformations on these data sets in combination with other data pre-processing techniques. We then assessed effects of a transformation on separation of compounds samples from non-samples using both Hotelling's T$^2$ statistic and area under the curve approaches. Both the Hotelling's T$^2$ statistic and area under the curve analysis methods were applied on data before and after applying a specific glog transformation. }
+
+\subsection{Objectives}\label{objectives}
+\par{The primary objective of this study was to investigate effects of glog variance stabilizing transformations on the separation of treatment replicates from non-replicates on high content imaging data. A treatment was defined as a candidate compound at a specific concentration. Treatment replicates refer to individual samples of the same treatment, whereas non-replicates are individual samples of different treatments. Further, effects of variance stabilizing transformations on proportions of treatments determined as active or inactive was investigated. Investigations were also done to determine whether transformations resulted in better treatment discrimination when performed at single-cell level or after aggregating at well level.}
+\subsection{Statistical analysis plan}\label{sapintro}
+\begin{figure}[ht!] 
+\centering
+  \begin{subfigure}[b]{0.5\linewidth}
+    \centering
+    \includegraphics[width=1.25\linewidth]{SAP.PNG} 
+     \vspace{1ex}
+  \end{subfigure}%%
+  \caption{statistical analysis}
+  \label{sapfigure} 
+\end{figure}
+
+\par{Figure \ref{sapfigure} gives a snapshot of the backbone statistical analyses applied in this report. For each data, a number of data pre-processing steps and a glog transformation at a specific $\lambda$ value were initially applied (sections \ref{glogtransformation}- \ref{acalling}). The first and third objectives were then assessed using both the Hotelling's T$^2$ statistic (section \ref{hoteli}) and AUC (section \ref{auc}) while assessment of transformation impact on proportion of active-calling was a direct product of active-calling procedure described in section \ref{acalling}. Specific sections summarizing results and discussions for each objective are as listed in figure \ref{sapfigure}. Overall, the report is prepared in 5 sections. This section gives a brief introduction to high content imaging data and wide-ranging application and effectiveness of variance stabilizing transformations, with a particular inclination to glog transformation. Data description and, data pre-processing procedures are explained in section \ref{data} while statistical analyses methods are introduced in section \ref{methodology}. Section \ref{results} devotes to the study results whereas discussion of results from analyses and concluding remarks are offered in section \ref{discussconclude}.}
+
+\clearpage
+\section{Data and data pre-processing}\label{data}
+\par{Two high-content imaging data sets from two different cell lines were used to underline conclusions drawn from the analysis and assess the effectiveness of VSTs in improving discrimination between treatment replicates and non-replicates. The cell lines used were a colon cancer cell line fluorescently labelled for the cytoskeleton and endosomes and a liver cancer cell line labelled for the endoplasmic reticulum and mitochondria. Each data set consisted of three batches with each batch containing eighteen 384-well plates. Each data set had a total of 16236 wells. Every plate contained between 134909 and 281177 cells in the first data and between 152679 and 330117 cells in the second data. Each well comprised of between 73 and 1812, and between  95 and 2120 cells in the first and second data sets, respectively. We tested a total of 1253 treatments. Each treatment was a unique combination of a compound and a concentration level. In total, 311 compounds were tested including \textit{Dimethyl SulfOxide} (DMSO) as a control (concentration level 0). Each compound had either 4 or 5 concentration levels. The concentration levels were \SI{1}{\micro M} (microMolar), \SI{3}{\micro M}, \SI{3.34}{\micro M}, \SI{9}{\micro M} and \SI{11.1}{\micro M}. In total, 462 features on intensity, texture and spatial distribution of intracellular markers as well as cellular shape and geometry were extracted from each cell using a custom Acapella (PerkinElmer) image analysis script. A sketch of the data structure and dimensional reduction from cell to well level is shown using the first data set in figure \ref{datasd}. The data pre-processing procedures including transformation, aggregation, normalization, feature selection and active calling are described below. 
+% 
+% \begin{figure}[!h]
+% \centering
+% \includegraphics[scale=0.5]{dataview_structured20072017.png}
+% \caption{Data levels}
+% \label{datastructure}
+% \end{figure}
+% 
+% \begin{figure}[!h]
+% \centering
+% \includegraphics[scale=0.5]{datadimension05082017.png}
+% \caption{Data dimension}
+% \label{datadimension}
+% \end{figure}
+
+\begin{figure}
+\centering
+\begin{minipage}{.5\textwidth}
+\centering
+\includegraphics[width=1\linewidth]{dataview_structured20072017.png}
+\caption*{Data structure}
+% \label{datastructure}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+\centering
+\includegraphics[width=1.25\linewidth]{datadimension12082017.PNG}
+\caption*{Data dimension}
+% \label{datadimension}
+\end{minipage}
+\caption{Data structure and dimension using data set 1}
+\label{datasd}
+\end{figure}
+}
+\subsection{Generalized log transformation (glog)}\label{glogtransformation}
+\par{Most of the multivariate methods, as has been pointed out in section \ref{intro}, rely on the assumptions that data variability is independent of the mean and other underlying gaussian assumptions \cite{Rocke2001, Purohit2004, Johnson2006}. However, in high content imaging data, these assumptions rarely hold and skewness in the distributions is often  observed. A variety of methods can be used to stabilize the variance \cite{Huber2002, durbin2002variance, VandenBerg2006,yeo2000, Rocke2003}. The glog transformation, defined in equation \ref{glogequation}, was used in this study.
+
+\begin{equation}\label{glogequation}
+\begin{split}
+z=\mbox{Log}(y-\alpha+\sqrt{(y-\alpha)^2+\lambda})
+\end{split}
+\end{equation}
+where $y$ is the untransformed data for a given feature, $\alpha$ is the feature mean for a feature across DMSO controls (the mean of low level measurements), $\lambda$ is the transformation parameter while $z$ is the glog-transformed data.
+}
+
+\par{Estimation of $\lambda$ can be done via a maximum likelihood method using a set of replicate measurements where the likelihood is maximized by minimizing the sum of squares of errors (SSE) of the transformed, Jacobian corrected data \cite{Durbin2003, Purohit2004}. In this study, however, the maximum likelihood estimate of $\lambda$ was not estimated due to the demanding computations needed as a result of the rather voluminous data involved and also, there was need to examine a range of glog transformations without limiting to a single transformation calculated at the maximum likelihood estimate (MLE) of $\lambda$. Therefore, a range of $\lambda$ values between 0.1 and 25 with an interval of 0.1 were simultaneously investigated. The $\alpha$ values were estimated from DMSO control measurements for each of the features per cell line as described in \cite{Rocke2001}. That is, the respective feature $\alpha$s were the means of that feature for the measurements observed in the DMSO control treatment across all the wells and plates for that cell line. }
+
+\par{Besides the glog transformation, many other variance stabilizing transformations exist. These include auto-scaling, Pareto scaling \cite{VandenBerg2006} and the Yeo-Johnson power transformations \cite{yeo2000, Weisberg2001}. Autoscaling transforms a feature such that the mean is zero and has variance equal to one. While autoscaling results in a uniform variability such that there is no bias towards features with high variation, it implies that features are now treated as equally important and therefore limits the role of features that are more relevant in describing a treatment's mechanism of action. Further, as noted in \cite{VandenBerg2006}, autoscaling is known to lead to inflation of the measurement error. Pareto scaling on the other hand transforms features such that the relative impact of features with large variations is reduced while concurrently maintaining the initial data structure. Unlike in autoscaling where the difference in the feature value and the mean is divided by the standard deviation, this difference is divided by the square root of the standard deviation when performing a pareto transformation. As pareto-scaled data structure largely resembles an untransformed data and is also highly sensitive to large changes in feature values, it often results in a considerable number of features with comparatively large variances. Therefore, its variance stabilizing ability is quite limited. Yeo-Johnson power transformation is a single-parameter ($\lambda$) modification of the Box-Cox transformation \cite{Box1964} that includes transformations in cases of a negative dependent variable. Much like in Box-Cox transformation, the power parameter $\lambda$ is estimated using maximum likelihood methods by selecting the $\lambda$ value that maximizes the profile likelihood. }
+% \subsubsection*{Auto-scaling}\label{ascaling}
+% \subsubsection*{Pareto-scaling}\label{pscaling}
+% \subsubsection*{Yeo-Johnson power transformation} \label{yeojohnson}
+
+\subsection{Aggregation}\label{aggregation}
+\par{After the transformation process described in section \ref{glogtransformation}, well-level data was obtained by calculating the mean for each feature of single-cell feature measurements per well. Further, the actual number of cells in a well after removing cells touching image borders were calculated. Before the succeeding phases of data processing, an aggregated data was then cleaned by dropping invalid wells containing fluorescent compounds. Also, two features whose measurements were dominated by zeros were excluded to avoid infinity results in later calculations. The resulting aggregated data for each cell line had 14688 wells with 460 features (figure \ref{datasd}). }
+
+\subsection{Normalization} \label{normalization}
+\par{To account for plate-to-plate variability, all features of the sample treatments were normalized by re-expressing them as z-scores of the corresponding feature values observed in the DMSO control. The z-score transformation was calculated by subtracting the mean of DMSO control measurements of a feature in a plate and dividing by the pooled standard deviation of that feature across all plates.}
+  
+\subsection{Feature selection}\label{fselection}
+\par{To select a set of non-redundant and highly informative features, the Minimum Redundancy - Maximum Relevance (MRMR) feature selection \cite{DeJay2013, Ding2005} procedure was used. MRMR selects a set of 'optimal' features by simultaneously optimizing two conditions. The first condition quantifies the relevance of the feature to the classifying treatment variable - that is the mutual information between the feature and the treatment variable - using an F-statistic (calculated as the ratio of variance between treatments and the pooled variance within treatments). A feature with the strongest differentiating ability for the treatments has a corresponding large F-statistic value, is ranked highest and therefore chosen for inclusion in the set of optimal features. The second condition is aimed at minimizing feature redundancy by selecting a feature that is maximally uncorrelated to the ones already selected. In this MRMR procedure, we identified a subset of features with low pairwise correlation and high reproducibility among replicates. In this regard, the approach aimed at identifying a feature subset that separated pairs of replicates (high correlation between pheno-signatures) from pairs of non-replicates (low correlation between pheno-signatures) as much as possible.}
+\par{Figure \ref{fselectionflow} shows a schematic set of steps in identifying a set of features with optimal separation between treatments. For a given number of features selected, Pearson correlation coefficients \cite{Nachtsheim2004} between treatment replicates and non-replicates are calculated. This results in two distributions, one for treatment replicates and another for non-replicates. An ROC curve quantifying the separation between the two distributions is then constructed and a corresponding AUC value calculated. This procedure is repeated for all sets of features between 2 and 75. An optimal number of features is then determined such that these features maximize the separation of treatment replicates from non-replicates within 1 standard error of the AUC .
+
+\begin{figure}[ht!] 
+\centering
+  \begin{subfigure}[b]{1\linewidth}
+    \centering
+    \includegraphics[width=1.15\linewidth]{fselection_flow.png} 
+     \vspace{1ex}
+  \end{subfigure}%%
+  \caption{Feature selection schema}
+  \label{fselectionflow} 
+\end{figure}
+}
+\subsection{Active calling}\label{acalling}
+\par{Each treatment sample was classified as active or inactive on the basis of the Euclidean distance to the center of the DMSO controls. The threshold for classification was calculated as the 95$^{th}$ percentile of the distribution of the distance of the DMSO samples to the DMSO center. For every treatment, the percentage of active replicates was calculated and treatments with at least 50\% active replicates were considered active, otherwise, the treatment was considered as inactive. }
+\par{A pictorial representation of the analysis matrix after all data processing steps for an untransformed second cell line data is shown in figure \ref{datamatrix}. Only actively-called treatments were considered for analysis. All selected features were used in AUC analysis, while the top 10 ranked features from MRMR were used for calculating the Hotelling's T$^2$ statistic.}
+
+\begin{figure}[ht!] 
+  \begin{subfigure}[b]{0.75\linewidth}
+    \centering
+    \includegraphics[width=1.25\linewidth]{datamatrix.PNG} 
+     \vspace{1ex}
+  \end{subfigure}%%
+  \caption{Data matrix for analysis}
+  \label{datamatrix} 
+\end{figure}
+\vspace{1cm}
+\clearpage
+\section{Methodology}\label{methodology}
+\par{To measure improvement in treatment separability before and after glog transformation, two approaches were used. The first method used the two-sample multivariate Hotelling's T$^2$ statistic, while the second method applied the area under the Receiver Operative Characteristic (ROC) curve approach, referred here as the AUC approach. }
+
+\subsection{Hotelling's T$^2$ statistic}\label{hoteli} %https://stats.idre.ucla.edu/stata/output/manova/ for Hotelling-lawey
+\par{The two sample Hotelling's T$^2$ statistic \cite{hotelling1931,wichern2007} measures the difference in two multivariate means and was used here to assess the improvement in the differences between mean vectors for pairs of actively-called treatments before and after the glog transformation. Assuming that replicates from both treatment populations are independently sampled, that both treatment populations are normally distributed with associated population mean vectors for the respective treatment populations being $\mu_1$ for the first treatment and $\mu_2$ for the second treatment in a treatment pair, respectively estimated with sample mean vectors $\bar{X_1}$ and $\bar{X_2}$, and having respective population variance-covariance matrices $\Sigma_1$ and $\Sigma_2$ (more so  that $\Sigma_1= \Sigma_2=\Sigma$) which are respectively estimated by sample variance-covariance matrices $S_1$ and $S_2$, the Hotelling's T$^2$ statistic is calculated using the formulation shown in equation \ref{hoteliequation}.
+
+\begin{equation}\label{hoteliequation}
+\begin{split}
+T^2 = (\mathbf{\bar{X}}_1-\mathbf{\bar{X}}_2)\prime \{\boldsymbol{S}_p(\frac{1}{n_1}+\frac{1}{n_2})\}^{-1}(\mathbf{\bar{X}}_1-\mathbf{\bar{X}}_2) \hspace{3mm}
+\end{split}
+\end{equation}
+where; 
+\begin{equation*}
+\begin{split}
+\boldsymbol{\bar{X}}_i= \frac{1}{n_i} \sum_{j=1}^{n_i}\boldsymbol{X}_{ij},  \hspace{5mm}
+n_i \hspace{2mm} \mbox{is the number of replicates for treatment $i$}, \\  
+\boldsymbol{S}_i=\frac{1}{n_i-1} \sum_{j=1}^{n_i}(\boldsymbol{X}_{ij}-\boldsymbol{\bar{X}}_i)(\boldsymbol{X}_{ij}-\boldsymbol{\bar{X}}_i)\prime, 
+\end{split}
+\end{equation*}
+
+\[ \mbox{and} \hspace{5mm}
+\mathbf{X_{ij}}=
+\left \{
+\begin{tabular}{c}
+$X_{ij1}$ \\
+$X_{ij2}$ \\
+.\\
+.\\
+.\\
+$X_{ijp}$  \\
+\end{tabular}
+\right \} \hspace{5mm} \mbox{is the treatment-replicates data matrix}  
+\]
+\\ with $X_{ijk}$ representing the $k^{th}$ feature of replicate $j$ from actively-called treatment $i$, $i={1,2}, \hspace{2mm} j={1,2...\mbox{\textit{total replicates for treatment}} \hspace{2mm} i} \hspace{2mm} \& \hspace{2mm} k={1,2... \mbox{\textit{total number of features selected}}} $. }
+
+\par{Since both $S_1$ and $S_2$ estimate $\Sigma$ under the homogeneity assumption, they were pooled together to provide a more efficient estimator of $\Sigma$. This estimate is the pooled variance, denoted as $S_p$ in equation \ref{hoteliequation} and calculated using the formula below: 
+$$S_p= \frac{(n_1-1)\boldsymbol{S}_1+ (n_2-1)\boldsymbol{S}_2}{n_1+n_2-2}$$ 
+
+The resulting T$^2$ statistic is distributed as $\frac{(n_1+n_2-2)p}{n_1+n_2-p-1}F_{p,n_1+n_2-p-1}$, where $F_{p,n_1+n_2-p-1}$ denotes a random variable with $p$ and $n_1+n_2-p-1$ degrees of freedom ($p$ being the dimension of the response matrix). If the observed statistical measure of distance between the two treatment mean vectors - T$^2$- is too large, that is, mean vector $\mu_1$ is too different from $\mu_2$, the null hypothesis $H_0: \mu_1= \mu_2$ is rejected and the alternative hypothesis $H_1: \mu_1 \ne \mu_2$ is therefore concluded. We note here that conclusion of the alternative hypothesis implies that the treatment pairs are well separated from each other. }
+
+\subsubsection*{Hotelling's T$^2$ statistic and the research questions}
+\par{To use the Hotelling's  T$^2$ statistic to answer the research questions, further restrictions were imposed due to the limited number of replicates for most of the treatments in both sets of data. Since most of the actively-called treatment pairs have at most 9 replicates (and therefore 18 observations in total), the number of features selected for T$^2$ had to be strictly less than 18. Further, for every pair of treatments compared, 2 degrees of freedom were lost in estimating the mean vectors leaving 16 degrees of freedom as the rank of residuals. Simulation studies also show that to be able to maximize on the power of MANOVA based statistics, the number of response variables has to be sufficiently less than error degrees of freedom \cite{Preacher2002,Chi2013}. Therefore, the top 10 ranked features from the feature selection procedure described in \ref{fselection} were used for calculating the T$^2$ statistic for untransformed and transformed datasets.}
+
+\par{To measure improvement in reproducibility of replicates as well as separation amongst replicates of a treatment compared to non-replicates, T$^2$ statistics were calculated for both transformed and untransformed data sets and their distribution and distributional statistics investigated. Since treatments were mutually expected to be different regardless of whether they come from the same compound or not, pairwise T$^2$ statistics were calculated for all the treatment pairs qualified as active via active-calling. In total, for N treatments chosen as active, pairwise treatments combinations resulted in $\frac{N(N-1)}{2}$ T$^2$ statistics. Then a distribution of the T$^2$ statistics plotted for every transformation was compared against the distribution obtained for the untransformed dataset. A shift to the positive of the distribution of T$^2$ statistic for a transformation compared to the untransformed result signified improvement in the reproducibility of the data for that transformation. Boxplots were also plotted, with effective transformations showing larger boxplot statistics.
+}
+\par{In using T$^2$ results to determine whether a transformation performs better on single-cell or aggregated data, a comparison of T$^2$ statistics calculated from transforming single-cell data and transforming data after aggregation using the same transformation parameters was done. Similar guidelines to inferences were done as described in the preceding paragraph. In general, the following was the procedure followed to calculate and use the T$^2$ for assessing the effect of transformation(s) on the separation of treatment replicates from non-replicates. \\
+
+\textcolor{black}{\underline{Hotelling's T$^2$ procedure}}
+\begin{enumerate}[i.]
+\item{Consider the $N$ treatments actively-called both before and after transformation. Each treatment had a minimum of 9 (and a maximum of 45) replicates} %(as sent by Steffen)} 
+\item{The 10 top-ranked features with strongest differentiating ability are chosen by feature selection for both the transformed and untransformed data. These two sets of top-ranked selected features were not necessarily the same}
+\item The Hotelling's T$^2$ statistic for every possible pair of treatments in both data is calculated. This results in $\frac{N(N-1)}{2}$ T$^2$ statistics for untransformed and transformed data 
+\item A distribution for T$^2$ statistic is plotted for the untransformed and all transformations to assess the transformational effect on the separation of treatment replicates \& non-replicates. Boxplots of T$^2$ statistic for transformed and untransformed cases were also plotted %for the treatment pairs
+\item A transformation resulting in larger T$^2$ statistics implied improved separation of treatment replicates and non-replicates. 
+\end{enumerate}
+}
+\par{To account for multiplicity and control familywise error rates, the Bonferroni correction was used to determine a significance level for a difference between mean vectors of a pair of treatments. To obtain a 0.05 familywise significance level for N actively-called treatments, a Bonferroni corrected significance level was calculated as $\frac{0.05}{0.5*N(N-1)}$. Where $0.5*N(N-1)$ is the total number of tests under consideration. }
+
+% \clearpage
+\subsection{Area Under the ROC Curve (AUC) approach} \label{auc}
+\par{The area under the receiver operating characteristic curve (AUC) is a measure for classification accuracy that is extensively applied in various fields of research. The ROC - AUC literature and merits have been broadly discussed  \cite{Metz1978, Hanley1982,Hanley1989, Zweig1993, Hand2009} and is contextually described here as a measure for evaluating the effect of the glog transformations in relation to the separation of treatment replicates from non-replicates. Following the feature-selection and active calling for treatments in a given glog transformation (and untransformed case also) process as described in sections \ref{fselection} and \ref{acalling}, the corresponding AUC value was calculated through a two-step procedure as described in subsections below. }
+
+\subsubsection*{Replicates and non-replicates correlation and distribution}
+\par{Initially, Pearson correlation coefficients in terms of the selected features were computed between pairs of replicates and pairs of non-replicates of a set of actively-called treatments of a transformed (or untransformed) data set to provide a measure of similarity. This establishes two distributions of correlation values (one for pairs of replicates and a second for pairs of non-replicates). Correlation between pairs of replicates is expected to be high, whereas correlation between non-replicates is expected to be low. The separation between these two distributions therefore provides a measure of how well treatments can be discriminated.}
+\subsubsection*{Construction of ROC curve and the AUC}
+\par{To quantify the separation between the two distributions, an ROC curve was constructed (as described in schematic diagram \ref{fselectionflow}) using a series of correlation thresholds and the area under the curve (AUC) calculated, resulting in a single valued measure of separation. At a given threshold value $t$, the proportion of correctly identified replicates (y-axis) and the proportion of correctly identified non-replicates (x-axis) formed a point on the ROC curve.}
+\subsubsection*{AUC statistic and the research questions}
+\par{To use the AUC approach in investigating the effect of the range of glog transformations on the separation between treatment replicates and non-replicates, a random sample of treatments was selected 10 times and corresponding AUC values computed for each transformed data set and its untransformed data determined by the dimension of common actively-called treatments. A transformation that leads to better separation between replicates and non-replicates would have in general higher values for the AUC across the random samples and thus numerically larger boxplots statistics than those observed in the untransformed case. A composite plot of all the AUC values across runs for transformed and untransformed scenarios was presented. Similarly, to compare the performance of a transformation on single-cell versus aggregated data, AUC values were calculated on data transformed at single-cell level and compared to AUC outputs for well-level transformed data. Similar intuition used to conclude effectiveness of a transformation compared to the untransformed case was applied in concluding effectiveness of transformation at single-cell or aggregated data levels.}
+% 
+% \subsubsection{Proof of concept}\label{proofconcept}
+% \par{To show that the glog transformation indeed improves the separation between treatment replicates from non-replicates, graphical representations showing how a pair of actively-selected treatment profiles changed using features selected under the untransformed case and profiles for the same set of treatments using features selected after the glog transformation were plotted. The plots were for treatment combinations where the change in the Hotelling's T$^2$ statistic was at least 250000 and 200000 units in the first and second data sets respectively. }
+
+\subsection{Statistical softwares}\label{ssoftware}
+\par{All the data management and analyses were done using R 3.4.0 software \cite{R2017} and its in-built packages. In the MRMR procedure available in the MRMR package, the functions \textbf{run\_mRMR} and \textbf{evaluationAUC} were used for feature selection and calculation of the AUC value for treatment separation respectively. The Hotelling's T$^2$ statistic was calculated using the \textbf{hotelling.test} function available in the Hotelling package in R. }
+
+\clearpage
+\section{Results}\label{results}
+\subsection{Exploratory data analysis}\label{edaresults}
+
+\subsubsection{Treatment replicates}
+% \par{Figure \ref{nreplicates} shows the number of replicates per treatment for both data sets.}
+\par{In each data set, 1192 (95.208\%), 28 (2.236\%) and 32 (2.556\%) treatments had 9, 36  and 45 replicates respectively. DMSO control was replicated across 1512 wells.
+%added commnets for discussion
+The large number of treatments with 9 replicates meant that for application of Hotelling's T$^2$ statistic as a measure of separation between treatment replicates and non-replicates, a limited number of selected features were used so as to maximize the power of the statistic. To safeguard against using a larger number of features as compared to the rank of residuals for any arbitrarily chosen pair of treatments therefore, 10 highest ranked selected features were used in calculating the T$^2$ statistic.
+% \begin{center}
+% \begin{tabularx}{\textwidth}{*{2}{>{\centering\arraybackslash}X}}
+%    \centering
+% \includegraphics[width=1\linewidth,valign=m]{D2_treatment_replicates.png} % instead of actual figure
+%    &
+%  \begin{tabular}{ p{.2\textwidth}  p{.2\textwidth}  p{.2\textwidth} }
+%  \multicolumn{3}{c}{Number of replicates (percentage of sample treatments)}\\   
+% 9 (\%) & 36 (\%) & 45 (\%) \\ \hline
+% 1192(95.208) & 28(2.236) & 32(2.556) \\
+%       \end{tabular}
+% \end{tabularx}
+%    \captionof{figure}{Number of treatments with specified number of replicates}
+%    \label{nreplicates}
+%  \end{center}
+}
+\subsubsection{Cell and well level calculated mean $\alpha$ values }
+\par{Figure \ref{alpharatiosfig} and table \ref{alpharatios} (in Appendix) respectively show the ratio and actual calculated mean $\alpha$ values for all features in both data sets. Except for a few features where the calculated $\alpha$ values had relatively huge differences when calculated at well level compared to cell level, most of them were close. 2 (0.44\%) of the features in the first data set and 17 (3.7\%) for the second data set had $\alpha$ mean differences beyond 5\% of each other in absolute values. 
+%added for discussion
+The difference in mean $\alpha$ values is a result of reduced variability due to aggregation at well-level as compared to high variability observed at cell levels. Feature \textit{Nuc\_NucCytoBFP2RFP\_PearsonCor} for the first data set had the highest ratio at 1.13 between $\alpha$ values calculated at cell and well levels. \textit{Cell\_NucCytoBFP2GFP\_PearsonCor} resulted in the lowest ratio of 0.914. In the second data, \textit{Cell\_NucCytoBFP2GFP\_PearsonCor} (\textit{Cell\_NucCytoBFP2RFP\_PearsonCor}) had the highest (lowest) ratio of 1.217 (0.707). These features, which quantify correlation between cell and respective nuclear (or nuclear to nuclear for \textit{Nuc\_NucCytoBFP2RFP\_PearsonCor} in first data) cytoplasms, were highly variable at cell level compared to when aggregated at well level. Features with high ratios between cell- and well-calculated $\alpha$ values were however few. Comparison between $\alpha$ values calculated at cell and well level was mandatory since very different $\alpha$s would end up comparing different glog transformations even if applied using the same $\lambda$ parameter.
+} 
+\\
+
+\begin{figure}[ht!] 
+\centering
+  \begin{subfigure}[b]{0.8\linewidth}
+    \centering
+    \includegraphics[width=1\linewidth]{alpha_ratios.pdf} 
+     \vspace{1ex}
+  \end{subfigure}%%
+  \caption{Ratio of calculated $\alpha$ values at well and cell level.}
+  \label{alpharatiosfig} 
+\end{figure}
+
+\vspace{2cm}
+\subsubsection{Actively-called treatments for untransformed data sets}
+\par{Figure \ref{activecallgraphs} shows graphic representations for categorization of active and inactive treatments. The dotted vertical line shows the cut-off point (0.5 mark). Treatments with more than 50\% of replicates significantly different from DMSO controls - with significance from DMSO controls determined using the Euclidean distance to the center of DMSO - appear to the right of the cut-off point and are concluded as active. Treatments with less than 50\% of replicates significantly different from the DMSO controls appear to the left of the cut-off point and were concluded as inactive. For instance, treatments with an active proportion of 1.0 imply that all replicates were different from DMSO controls. Treatments with an active proportion of 0.0 conversely had all replicates that were not different from DMSO controls. The number of replicates for all treatments at a given proportion is shown on the y-axis. In total, 707 (56.42\%) treatments in the first and 650 (51.88\%) in the second data set were active. }
+\\
+% \begin{figure}[ht!]
+% \centering
+% \begin{minipage}{.495\textwidth}
+% \centering
+% \includegraphics[width=1\linewidth]{notransactivecall.pdf}
+% \caption*{First data set}
+% % \label{datastructure}
+% \end{minipage}
+% \begin{minipage}{.495\textwidth}
+% \centering
+% \includegraphics[width=1\linewidth]{D2_notransactivecall.pdf}
+% \caption*{Second data}
+% % \label{datadimension}
+% \end{minipage}
+% \caption{Proportion of actively-called treatments for untransformed data}
+% \label{activecallgraphs}
+% \end{figure}
+
+\begin{figure}[ht!] 
+  \begin{subfigure}[b]{0.6\linewidth}
+    \centering
+    \includegraphics[width=1\linewidth]{notransactivecall.pdf} 
+    \caption*{First data set}
+     \vspace{1ex}
+  \end{subfigure}%%
+    \begin{subfigure}[b]{0.6\linewidth}
+    \centering
+    \includegraphics[width=1\linewidth]{D2_notransactivecall.pdf}
+    \caption*{Second data}
+     \vspace{1ex}
+  \end{subfigure}%%
+ \caption{Proportion of actively-called treatments for untransformed data}
+ \label{activecallgraphs} 
+\end{figure}
+
+% \clearpage
+
+\subsection{Effect of transformations on separation of treatment replicates and non-replicates}
+\subsubsection{Hotelling's T$^2$ results}\label{hoteliresults}
+% \par{Hotelling's T$^2$ statistics were calculated for pairwise active treatment combinations in the untransformed and each of transformed cases for $\lambda$ values ranging from 0.1 to 25. In the untransformed case, there were 249571 and 210925 T$^2$ statistics resulting from 707 and 650 active treatments for the first and second data sets respectively. 128273 (51.397 \%) and 132178 (62.666 \%) of these T$^2$ statistics were not significant (with Bonferroni corrected p-values).}
+
+\par{To assess improvement in separation of treatments due to transformation, T$^2$ statistics were calculated for untransformed and transformed data sets using actively-called treatments present both pre- and post-transformation. Only glog transformations with $\lambda$ values 0.1 and ranging between 0.5 to 25 at intervals of 0.5 were computed and plotted for due to time, computations involved and ease of presenting results obtained. The two sets of T$^2$ statistics (one for untransformed and another for transformed) were plotted in each combination of transformed and untransformed data sets. As a result, each transformed data had its own corresponding untransformed data set, which was determined by the number of actively-called treatments existing in both data sets. A transformation with its T$^2$ statistics distribution positively shifted of its untransformed T$^2$ distribution implied improved separation for treatments compared to when data was untransformed (figures \ref{distt10505a} to \ref{distt10505d} in appendix). This is because large T$^2$ statistics point to greater distance between treatment pairs, have a higher chance of being classified as significant and thus better treatments separation. Figure \ref{boxt2} (in appendix) shows boxplots for $log(T^2)$ for each transformed data and its corresponding untransformed data.}
+
+\par{Presence of outlying statistics both before and after transformation was evident, with differences between boxplots at every $\lambda$ value often obscured as a result. However, as observed in figures \ref{distt10505a} to \ref{distt10505d}, there were some transformations that led to small improvements in treatments separation judging from shifts in their T$^2$ distribution medians. In particular, for transformations of $\lambda =10.5$ and $\lambda =11$ for the first and $\lambda = 0.1$ and $\lambda = 0.5$ for the second data set respectively, figure \ref{distt10501log} shows distributions of their $log(T^2)$ and median locations compared to respective untransformed cases. For these transformations, the resulting medians of their $log(T^2)$ were slightly positively-shifted compared to untransformed cases. These transformations therefore led to marginally better separation of treatment replicates from non-replicates. Figure \ref{distt8510log} on the contrary shows some transformations that either performed poorly or equally as in untransformed cases. All their transformed $log(T^2)$ medians were either equivalent or negatively shifted in comparison with untransformed distributions.}
+
+\par{Figure \ref{pvalued1} (in appendix) shows increase in the proportion of T$^2$ statistics concluded as significant when an effective transformation was applied. Proportion of T$^2$ statistics concluding that treatment pairs were not significantly different from each other dropped from \textit{49.82 \% to 45.93 \%} when a transformation with $\lambda =10.5$ was applied to the first data while for $\lambda = 0.5$, the proportion increased from \textit{62.39 \% to 62.79 \%} when applied to the second data set. For $\lambda =10.5$, the number of actively-called treatments was 703 compared to 707 for untransformed case in the first data set. Of these treatments, 683 were active both before and after transformation. Consequently, 45.93\% of 232903 (i.e. 106968) treatment pairs were concluded to be non-significantly different compared to 116021 when untransformed. Therefore,  a glog transformation of $\lambda =10.5$ on the first data set led to 9053 more treatment combinations being classified as significantly different. Similarly, a $\lambda = 0.5$ transformation on the second data set resulted in 662 active treatments compared to 650 when untransformed. Of these, 642 treatments were actively-called both pre- and post-transformation. This was associated with 129198 non-significant T$^2$ statistics compared to 128371 non-significant T$^2$ when untransformed. This transformation was as a result credited with an decrease of 827 significant T$^2$ statistics.}
+\par{Boxplots for both sets of data in figure \ref{boxt2} showed that differences between transformed and untransformed medians of $log(T^2)$ statistics observed in figure \ref{distt10501log} were mainly due to outlying values and that these differences were very small in themselves. Further, effects of transformations on proportion of treatment pairs concluded as significantly different were data-dependent. In the first data, a transformation with $\lambda = 10.5$ which was associated with a marginal improvement in treatments separation increased the proportion of significantly different pairs by 9053. In contrast, transformation with $\lambda = 0.5$ which also seemed to slightly improve treatments separation in the second data decreased the proportion of significant treatment pairs by 827. The Hotelling's $T^2$ statistics method consequently suggests that the transformations failed to substantially and consistently improve separation between treatment replicates and non-replicates beyond separation observed before applying transformations.}
+\begin{figure}[ht!]
+  \begin{subfigure}[b]{0.425\linewidth}
+  \centering
+\includegraphics[width=1\linewidth]{LOG_matched__hotellings_allactiveTRTS_lambda=10point5.pdf}
+\caption*{Transformation on first data set ($\lambda =10.5$)}
+\vspace{1ex}
+ \end{subfigure}%%
+  \begin{subfigure}[b]{0.425\linewidth}
+  \centering
+\includegraphics[width=1\linewidth]{LOG_matched__hotellings_allactiveTRTS_lambda=11.pdf}
+\caption*{Transformation on first data set ($\lambda =11$)}
+\vspace{1ex}
+ \end{subfigure}%%
+ \\
+   \begin{subfigure}[b]{0.425\linewidth}
+  \centering
+\includegraphics[width=1\linewidth]{D2_LOG_matched__hotellings_allactiveTRTS_lambda=0point1.pdf}
+\caption*{Second data set ($\lambda =0.1$)}
+\vspace{1ex}
+ \end{subfigure}%%
+  \begin{subfigure}[b]{0.425\linewidth}
+  \centering
+\includegraphics[width=1\linewidth]{D2_LOG_matched__hotellings_allactiveTRTS_lambda=0point5.pdf}
+\caption*{Second data set ($\lambda =0.5$)}
+\vspace{1ex}
+ \end{subfigure}%%
+\caption{Distribution of log(T$^2$) statistics after transformation compared to untransformed cases}
+\label{distt10501log}
+\end{figure}
+
+\clearpage
+\subsubsection*{Proof of treatment separation concept}
+\par{To illustrate that glog transformations associated with marginal improvements in separation between treatment replicates and non-replicates did indeed lead to some enhanced separation between treatment profiles, pairs of treatments that resulted in large differences between the Hotelling's T$^2$ before and after transformations were plotted for both data sets. In the first data set, pairs of treatments whose difference in pre- and post-transformation T$^2$ increased by more than 250000 units were plotted under a glog transformation with $\lambda = 10.5$. Four uniquely different treatment pair combinations- \textit{cmpd193} $@ \hspace{2mm} \SI{9}{\micro M}$ and \textit{cmpd306} $@ \hspace{2mm} \SI{1}{\micro M}$, \textit{cmpd275} $@ \hspace{2mm} \SI{3}{\micro M}$ and \textit{cmpd469} $@ \hspace{2mm} \SI{0.334}{\micro M}$, \textit{cmpd370} $@ \hspace{2mm} \SI{0.334}{\micro M}$ and \textit{cmpd694} $@ \hspace{2mm} \SI{9}{\micro M}$, and, \textit{cmpd807} $@ \hspace{2mm} \SI{9}{\micro M}$ and \textit{cmpd815} $@ \hspace{2mm} \SI{3}{\micro M}$ - had differences in T$^2$ higher than 250000.  19 features were selected before transformation while 21 were selected after transformation. Four features were commonly selected both before- and after-transformation. The respective paired treatment profiles are shown in figure \ref{data1prrof}.}
+
+\par{In line with earlier results obtained when discussing T$^2$ statistics of assessing improvement in treatments separation before and after transformation, treatment profiles where there were huge increases in the value of the T$^2$ statistics remained largely similar. For comparison of \textit{cmpd193} $@ \hspace{2mm} \SI{9}{\micro M}$ and \textit{cmpd306} $@ \hspace{2mm} \SI{1}{\micro M}$ treatment pairs in figures \ref{data1prrofa} and \ref{data1prrofb} for instance, the four features present before and after transformations showed mixed degrees of changes in profiling the treatments. For \textit{Cell\_NucCytoBFP\_SERHole\_1} and \textit{Nuc\_RFP\_SERValley\_1}, before transformation, treatment values for these features were very similar. However, after transformation and with a different set of optimal features, they appeared slightly better separated. \textit{Nuc\_GFP2RFP\_PearsonCor} and \textit{Nuc\_NucCytoBFP\_SERHole\_2} features showed minor improvements in separation of treatments profiles even after combining them with a different set of features. Even though some of these specific features present before and after transformation individually profiled differently, the general treatments profiles were clearly not different. These shows that transformational effects on treatment separation was at bare minimum and most cases non-existent. }
+% The profile for treatment \textit{cmpd306} $@ \hspace{2mm} \SI{1}{\micro M}$ also seems to now mirror the profile shown by treatment \textit{cmpd193} $@ \hspace{2mm} \SI{9}{\micro M}$ for most of the features.}
+
+\par{Three treatment combinations from the second data set - \textit{cmpd279} $@ \hspace{2mm} \SI{9}{\micro M}$ and \textit{cmpd897} $@ \hspace{2mm} \SI{1}{\micro M}$, \textit{cmpd735} $@ \hspace{2mm} \SI{0.334}{\micro M}$ and \textit{cmpd94} $@ \hspace{2mm} \SI{9}{\micro M}$, and, \textit{cmpd749} $@ \hspace{2mm} \SI{1}{\micro M}$ and \textit{cmpd94} $@ \hspace{2mm} \SI{9}{\micro M}$- had differences above 200000 and are plotted in figure \ref{data2prrof}. Figures \ref{data2prrofa} and \ref{data2prrofb} through to figures \ref{data2prrofe} and \ref{data2prroff} show that transformation was helpful in rescaling the data leading to better visualization and treatments separation. Before transforming, treatment profiles appeared to overlap for many features. These overlapping was reduced and in some cases not present after transformation. Analogous to results obtained where large changes in $T^2$ statistics were observed, figures \ref{data2prrofg} and \ref{data2prrofh} (also \ref{data1prrofa_supplement} and \ref{data1prrofb_supplement} in appendix) show that treatment pairs that were poorly separated pre-transformation likewise remained hardly changed after transformation and with different sets of selected features.}
+\clearpage
+\begin{figure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{lambda10_5untr_diff_250000_trt_combn1.pdf}
+  \caption{}
+  \label{data1prrofa}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{lambda10_5tr_diff_250000_trt_combn1.pdf}
+  \caption{}
+  \label{data1prrofb}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{lambda10_5untr_diff_250000_trt_combn2.pdf}
+  \caption{}
+  \label{data1prrofc}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{lambda10_5tr_diff_250000_trt_combn2.pdf}
+  \caption{}
+  \label{data1prrofd}
+\end{subfigure}
+\caption{Treatment profiles before and after transformation (first data set, $\lambda = 10.5$)}
+\label{data1prrof}
+\end{figure}
+\begin{figure}
+  \ContinuedFloat 
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{lambda10_5untr_diff_250000_trt_combn3.pdf}
+  \caption{}
+  \label{data1prrofe}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{lambda10_5tr_diff_250000_trt_combn3.pdf}
+  \caption{}
+  \label{data1prroff}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{lambda10_5untr_diff_250000_trt_combn4.pdf}
+  \caption{}
+  \label{data1prrofg}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{lambda10_5tr_diff_250000_trt_combn4.pdf}
+  \caption{}
+  \label{data1prrofh}
+\end{subfigure}
+\caption{Treatment profiles before and after transformation (first data set, $\lambda = 10.5$)}
+\label{data1prrof}
+\end{figure}
+
+\clearpage
+\begin{figure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{D2_lambda0_5untr_diff_200000_trt_combn1.pdf}
+  \caption{}
+  \label{data2prrofa}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{D2_lambda0_5tr_diff_200000_trt_combn1.pdf}
+  \caption{}
+  \label{data2prrofb}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{D2_lambda0_5untr_diff_200000_trt_combn2.pdf}
+  \caption{}
+  \label{data2prrofc}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{D2_lambda0_5tr_diff_200000_trt_combn2.pdf}
+  \caption{}
+  \label{data2prrofd}
+\end{subfigure}
+\caption{Treatment profiles before and after transformation (second data set, $\lambda = 0.5$)}
+\label{data2prrof}
+\end{figure}
+\begin{figure}
+  \ContinuedFloat 
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{D2_lambda0_5untr_diff_200000_trt_combn3.pdf}
+  \caption{}
+  \label{data2prrofe}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{D2_lambda0_5tr_diff_200000_trt_combn3.pdf}
+  \caption{}
+  \label{data2prroff}
+\end{subfigure}
+
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{D2_lambda0point5untr_diff_less0point5_trt_combn2.pdf}
+  \caption{}
+  \label{data2prrofg}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{D2_lambda0point5tr_diff_less0point5_trt_combn2.pdf}
+  \caption{}
+  \label{data2prrofh}
+\end{subfigure}
+\caption{Treatment profiles before and after transformation (second data set, $\lambda = 0.5$)}
+\label{data2prrof}
+\end{figure}
+
+\clearpage
+\subsubsection{AUC results}
+\par{AUC values were calculated using all features selected across all actively-called treatments common for both untransformed and transformed data sets as an alternative method of assessing the effect of transformations on separation of treatment replicates from non-replicates. The results for both cell lines were summarized using boxplots and are displayed in figure \ref{allbox}. Only $\lambda$s equal to 0.1 and 0.5 to 25 at intervals of 0.5 were plotted for similar reasons as listed in section \ref{hoteliresults}. Each transformation was compared to an untransformed subset data-set with the same actively-called treatments.}
+
+\par{For all transformed and untransformed cases in the first data set, AUC values ranged between 0.9801 and 0.9848 with a median of 0.9828. Most boxplots for transformed data had slightly higher AUC values than corresponding untransformed cases. In a few transformations where untransformed cases showed higher AUC values compared to when transformed, the difference was not large as evidenced by values after transformation falling well within upper and lower quantiles of AUC values realized when untransformed. The respective differences were in general minimal. The minimal improvement in AUC values after transformation were due to effective treatments separation pre-transformation, all of which had AUC values above 0.98. Transformations of $\lambda$ values 0.1, 6, 11 and 22 had distinctly elevated boxplot values. Although the differences were small, these transformations led to marginal improvements in treatments separation. Conversely, transformations with $\lambda$ values 0.5, 10.5 and 22.5 showed very similar AUC values with their untransformed cases. They therefore had minimal effect on treatments separation beyond what was observed pre-transformation. It is important to note that improvement (or lack of) in treatments separation was highly sensitive to small changes in $\lambda$ values. }
+
+\par{AUC values for the second data set ranged between 0.9498 and 0.9633 with a median of 0.9562 across all transformed and untransformed cases. Similar to results for the first data set, treatments separation pre-transformation was highly effective. Therefore, improvement in separation of treatments as a result of transformation was limited. Unlike in the first data set however, where transformations either performed marginally better or equivalent to untransformed cases, in the second data set, all possible comparison results were observed. Some transformations led to slight improvements in treatments separation, others were just as effective as when untransformed while a few led to slightly lower separation. Still, these differences were small. Transformations with $\lambda$ values at 3.5, 4.5 and 5 resulted in AUC values distinctly lower than in respective untransformed cases. These transformations were associated with lowered treatments separation compared with when data was untransformed. Transformations with $\lambda$ values equal to 0.1, 15.5 and 17.5 led to insignificantly higher AUC values. They therefore resulted in slight improvement in treatments separation. }
+
+\begin{landscape}
+\begin{figure}[ht!]
+\centering
+\begin{subfigure}{1\textwidth}
+\centering
+\includegraphics[width=1.05\linewidth]{matched_auc_all_lambdas.pdf}
+\caption*{first data set}
+\end{subfigure}%
+\caption{Boxplots of AUC values across runs for transformed and untransformed data sets}
+\label{allbox}
+\end{figure}
+\end{landscape}
+
+\begin{landscape}
+\begin{figure}[ht!]
+\centering
+\ContinuedFloat
+\begin{subfigure}{1\textwidth}
+\centering
+\includegraphics[width=1.05\linewidth]{D2_matched_auc_all_lambdas.pdf}
+\caption*{Second data set}
+\end{subfigure}%
+\caption{Boxplots of AUC values across runs for transformed and untransformed data sets}
+\label{allbox}
+\end{figure} 
+\end{landscape}
+
+
+\par{In all cases, whether a transformation led to a small improvement, no improvement or in cases where treatments separation due to a transformation was poorer compared to when untransformed, it was evident from AUC boxplots and distributions of T$^2$ that transformations generally failed to markedly improve treatments separation beyond what was observed pre-transformation. Two factors were observed to have most likely contributed to a general lack of effectiveness of transformations in improving treatments separation. Firstly, transformations had virtually no effect on features distributions. Secondly, treatments separation before transformation was highly effective. These factors are delved into in sections below.}
+
+\subsubsection*{Effect of transformations on distribution of selected features}
+\par{Before transformation, all features selected in both data sets showed lack of normality (figures \ref{distdata1} and \ref{distdata2} (in appendix)). Both positive and negative skewness were present. The non-normality in distributions intrinsically points to a lack of independence between the mean and standard deviation of each of the features. To investigate whether glog transformations improved features distributions, a pair of transformations that showed a slight improvement in treatments separation were applied in both sets of data. A transformation of $\lambda = 10.5$ was applied across all features in the first data set, while for the second data, a transformation of  $\lambda = 0.5$ was similarly applied.}
+\par{Results for distributions of some features that were not selected in the optimal set before but were selected after transformation are shown in figures \ref{distdata1} and \ref{distdata2} (in appendix). For the first data, 17 features not initially selected in untransformed case were selected after a glog transformation with $\lambda = 10.5$. In the second data, 18 features not selected pre-transformation were selected after a transformation of $\lambda = 0.5$. While a few features distributions clearly improved, distributions for most selected features showed little improvement towards normality after transformation. This was not surprising, however, since transformations were not tailored to address feature-specific lack of normality. Normality in response distributions is a cornerstone assumption for applying multivariate methods (particularly for T$^2$) and since after transformation there was selective improvement in normality, both pre- and post-transformation data remained sub-optimal for application of the Hotelling's T$^2$ methodology and resulted in similar statistics.}
+
+\subsubsection*{Differentiating ability of features selected}
+\par{Figures \ref{differntiatingfeatures1} and \ref{differntiatingfeatures2} for the first data set, and  \ref{d2_differntiatingfeatures1} and \ref{d2_differntiatingfeatures2} for the second dataset, show the discriminating ability of features selected using the MRMR procedure for highly unlike treatments and treatments with similar mechanisms of action. The features are selected on the untransformed data sets. In the first data set, 19 features were selected while 34 features were selected in the second data set. For both data sets, feature profiles for highly similar treatments are indifferent, while less similar treatment pairs show very different profiles. The features selected on these untransformed data show a high ability to differentiate treatments replicates from non-replicates based on treatment mechanisms of action. As a result, applying a transformation was unlikely to show more impressive treatments separation since excellent separation was already achieved on untransformed data by selecting a very effective set of features. }
+\\
+
+\begin{figure}[ht!]
+\centering
+  \begin{subfigure}[b]{0.8\linewidth}
+  \centering
+\includegraphics[width=1.175\linewidth]{data1_distr_setdiff_pre_post_transformation_9to12.PDF}
+\vspace{1ex}
+ \end{subfigure}%%
+\caption{Data set 1 - feature distributions before (black line) and after (blue line) transformation ($\lambda = 10.5$)}
+\label{distdata1}
+\end{figure}
+
+\begin{landscape}
+\begin{figure}[!ht]
+\begin{subfigure}{0.8\textwidth}
+\centering
+    \includegraphics[scale=1]{EDA_minimal_diffTRT.PDF}
+\caption{Similar treatments}
+  \label{differntiatingfeatures1} 
+\end{subfigure}
+\hskip -15ex
+\begin{subfigure}{0.8\textwidth}
+\centering
+  \includegraphics[scale=1]{EDA_maximal_diffTRT.PDF}
+    \caption[Data set 1]{Less similar treatments} 
+    \label{differntiatingfeatures2} 
+\end{subfigure}
+\caption[feature differentiation]{Differential ability of features selected- first data set}
+\label{differntiatingfeatures}
+\end{figure}
+\end{landscape}
+
+\begin{landscape}
+\begin{figure}[!ht]
+\begin{subfigure}{0.8\textwidth}
+\centering
+    \includegraphics[scale=1]{D2_EDA_minimal_diffTRT.PDF}
+\caption{Similar treatments}
+  \label{d2_differntiatingfeatures1} 
+\end{subfigure}
+\hskip -15ex
+\begin{subfigure}{0.8\textwidth}
+\centering
+  \includegraphics[scale=1]{D2_EDA_maximal_diffTRT.PDF}
+    \caption[Data set 1]{Less similar treatments} 
+    \label{d2_differntiatingfeatures2} 
+\end{subfigure}
+\caption[feature differentiation]{Differential ability of features selected- second data set}
+\label{d2_differntiatingfeatures}
+\end{figure}
+\end{landscape}
+
+%%%%%%%%%%%
+\clearpage
+\subsection{Effect of transformation on number of features selected and proportion of active treatments}
+\par{Figures \ref{featselectdata1} and \ref{featselectdata2} show the effect of transformation on the number of features selected for the first and second data set respectively for all $\lambda$ parameters investigated. For untransformed data, the optimal number of features was 19 for the first data set and 34 for the second data. The number of features selected for the first data set after transformation was generally higher compared to when untransformed. The minimum number of features selected was 16 for $\lambda = 0.3 $ and maximum at 25 features for $\lambda$ values 0.5 and 0.9.}
+\begin{figure}[!ht] 
+\centering
+  \begin{subfigure}{0.55\textwidth}
+    \centering
+    \includegraphics[width=1.05\linewidth]{lambdavsoptfeature_alpha.pdf} 
+\caption{First data set}
+  \label{featselectdata1}
+  \end{subfigure}%% 
+  \begin{subfigure}{0.55\textwidth}
+    \centering
+    \includegraphics[width=1.05\linewidth]{D2_lambdavsoptfeature_alpha.pdf} 
+    \caption[Second data set]{Second data set} 
+    \label{featselectdata2} 
+    \vspace{0ex}
+  \end{subfigure} 
+\caption[Effect of transformation on number of selected features]{Effect of transformation on features selected}
+  \label{featselectdata} 
+\end{figure}
+
+\par{Unlike in the first data set where features selected after transformation were generally higher than features selected when untransformed, the number of features selected in the second data set showed patches of values highly sensitive to the range in which the transforming parameter $\lambda $ falls. The minimum number of features of 18 was selected at $\lambda = 0.2 $ while the maximum number was 46 selected for $\lambda = 2.2 $ and $\lambda = 3.1 $. Only $\lambda $ values between 0.9 and 10.7, and greater than 23.8 consistently selected more than the 34 features selected for untransformed data.}
+
+\subsubsection*{Effect of transformation on proportion of treatment active calling}
+\par{Figures \ref{acall1} and \ref{acall2} show the effect of transformation on the proportion of treatments concluded as active for the first and second data set respectively. Figure \ref{acall1} shows that the proportion of actively-called treatments was largely below 56.42\% achieved for the first untransformed data, except for $\lambda$ values of 0.1, 0.3, 2.3 and 5.3 that respectively had proportions of 56.90\% , 56.98\% , 56.58\%  and 56.58\% . Transformations that showed marginal improvement in separation of treatment replicates from non-replicates were in general associated with the highest decrease in proportions of actively-called treatments compared to untransformed data. For instance, transformation with $\lambda = 10.5$ resulted in a proportion of 56.11\% while $\lambda = 11$ resulted in 55.63\%. $\lambda = 19.9$ gave the lowest proportion at 55.467. }%\% while $\lambda = 0.3$ had the maximum proportion of active treatments at 56.98\%.}
+
+\begin{figure}[!ht] 
+\centering
+  \begin{subfigure}{0.55\textwidth}
+    \centering
+    \includegraphics[width=1.05\linewidth]{lambdavsactcall_alpha.pdf} 
+\caption{First data set}
+  \label{acall1}
+  \end{subfigure}%% 
+  \begin{subfigure}{0.55\textwidth}
+    \centering
+    \includegraphics[width=1.05\linewidth]{D2_lambdavsactcall_alpha.pdf} 
+    \caption[Second data set]{Second data set} 
+    \label{acall2} 
+    \vspace{0ex}
+  \end{subfigure} 
+\caption[Effect of transformation proportion of active calling]{Effect of transformation proportion of active calling}
+  \label{acall} 
+\end{figure}
+
+\par{All transformations in the second on the other hand were associated with increased proportions of actively-called treatments as shown in figure \ref{acall2}. In this case, transformations that appeared to perform relatively better in treatment separation compared to untransformed data generally had higher proportions of actively-called treatments. A case in point is $\lambda = 0.1$ that was associated with a proportion of 54.99\% which was also the highest increase in proportion of active-called treatments observed. The minimum proportion of 51.56\% was achieved with $\lambda = 1.4$. Observing the respective data-specific graphs for features selected and proportion of active treatments also reveals a suspect functional relationship. For the first data set, the high number of features selected was in general followed by lower proportions of actively-called treatments compared to the untransformed case. The second data set on the hand, save for the rather weird observations for low $\lambda $ values, splits the graphs into two phases. The phase with higher number of features selected compared to untransformed case clearly associates with lowered proportions of active treatments, albeit still above the proportion under no transformation. The second phase with less features selected was associated with a higher proportion of treatments qualified as active. }
+
+\subsection{Performance of transformation when applied at cell and well levels}
+\par{To investigate whether the glog transformation had improved treatments separation when applied at single cell or well level, both data sets were transformed using a select set of transformations that showed small improvements in separating treatments in comparison with untransformed cases when applied on single cell data. For the first data set, a corresponding transformation with $\lambda = 10.5$ and $\alpha$ mean values calculated on aggregated data was applied to well level data. For the second data set similarly, a transformation with $\lambda = 0.5$ was applied to well-aggregated data. Only treatments that were classified as active for untransformed, and cell- and well-level transformations for each data set were analyzed. The Hotelling's T$^2$ and AUC methods were then used to compare performance for untransformed and when transformations were applied at cell- and well levels. Distributions for the T$^2$ and boxplots for both the AUC and T$^2$ statistics were used and inferences done in a similar way as has been discussed in earlier sections. To assess reproducibility of results, further investigations were done for an extra set of transformations that performed marginally better than in untransformed cases at single cell level, and also a pair of transformations that performed indifferently to untransformed cases at single cell level. In that regard, to confirm that results using $\lambda = 10.5$ in the first data set were reproducible, transformation results for $\lambda = 11$ were also investigated. In the second data set, to check reproducibility of results for $\lambda = 0.5$, results for $\lambda = 0.1$ were also investigated. For the transformations that were indifferent at single cell level, transformations for $\lambda = 8.5$ and $\lambda = 10$  were investigated for the first data set. Similarly, transformations for $\lambda = 8.5$ and $\lambda = 10.5$ were investigated for the second data set as a pair of transformations that showed little improvement in the separation of treatments when applied at single cell level.}
+
+\subsubsection{Hotelling's T$^2$ results} %distt10501_agg_poor
+\par{Figures \ref{distt10501_agg1} and \ref{distt10501_agg2} show distribution of logarithm of the Hotelling's T$^2$ statistic for a pair of transformations ($\lambda = 10.5$ and $\lambda = 11$) that minimally improved treatments separation on single cell first cell line data. These transformations showed small but non-significant improvements in treatments separation when applied at cell level compared to when applied at well level. Box-plots comparing performance at cell- and well-level did not reveal any clear-cut improvement to results obtained in the untransformed case. For transformations that were indifferent to the untransformed cases at single cell level ($\lambda = 8.5$ and $\lambda = 10$) in figures \ref{distt10501_agg1_poor} and \ref{distt10501_agg2_poor}, transforming data at well level was associated with non-significantly reduced effectiveness in treatments separation compared to when untransformed or transformed at single-cell level.}
+\par{In the second data, similar conclusions were drawn for transformations that led to slight improvements in treatment separation at single cell level. Figures \ref{distt10501_agg3}, \ref{distt10501_agg4} show distributions for transformations with $\lambda = 0.1$ and $\lambda = 0.5$. For these pair of transformations, applying the glog transformation at single-cell level was associated with a negligible improvement in treatments separation. For transformations that led to no improvement in treatment separation on single cell data, transformations investigated were  $\lambda = 8.5$ and $\lambda = 10.5$ and results are as graphically represented in figure \ref{distt10501_agg3_poor} and \ref{distt10501_agg4_poor}. They both showed minimal improvement in separation when transformations were done at well level compared to cell level.}
+\par{In summary, when using the Hotelling's T$^2$ statistic, transformations that led to minimal improvements in treatment separation at single cell level were consistent in their output for both data sets. They all pointed to small improvements that were non-significant in treatments separation when applied on single cell data. However, applying transformations that failed to improve treatment separation over the untransformed data gave non-significant but data-dependent results. The first data set showed that for $\lambda = 8.5$ and $\lambda = 10$, transformations non-significantly improved separation between treatments when applied on single-cell data compared to when applied at well level. For the second data, however, transformations with $\lambda = 8.5$ and $\lambda = 10.5$ suggested non-significantly improved treatments separation when applied at well level. }
+
+\subsubsection{AUC results}
+\par{Transformations that showed improved treatments separation for the first data set ($\lambda$ values 10.5 and 11) performed similarly when applied at cell or well level (figures \ref{agg_allbox1} and \ref{agg_allbox2}). Treatments separation when applied at $\lambda = 10.5$ lost all their marginal effectiveness observed at single cell level when considering only actively-called treatments across the untransformed, cell and well-level transformed data sets. At $\lambda = 11$, both cell- and well-level transformed data sets marginally improved treatments separation compared to when data was untransformed. However, neither of cell- nor well-level transformations was clearly better. Similarly, for transformations that failed to give any improvement in treatment separation at cell level ($\lambda$ values 8.5 and 10), no clear improvement in treatments separation was visible between cell- and well-level transformations (figures \ref{agg_allbox1_poor} and \ref{agg_allbox2_poor} in appendix).}
+\par{All transformations applied at single cell level separated treatments marginally better than when applied at well-level for the second data set (figures \ref{agg_allbox3} and \ref{agg_allbox4}, \ref{agg_allbox3_poor} and \ref{agg_allbox4_poor} in appendix). Effectiveness of transformations with $\lambda$ values 0.5 and 8.5 however were indifferent to when untransformed for actively-called treatments across the three sets of data. Just as we have noted throughout this report, however, any slight improvements in treatments separation were very small and largely insignificant.}
+
+\begin{figure}[ht!]
+\begin{minipage}{.425\textwidth}
+\centering
+\includegraphics[width=1\linewidth]{LOG_matched_aggregated_hotellings_allactiveTRTS_lambda=10point5.pdf}
+\subcaption{\textsl{first data set ($\lambda =10.5$)}\label{distt10501_agg1}}
+\end{minipage}
+\begin{minipage}{.425\textwidth}
+\centering
+\includegraphics[width=1\linewidth]{LOG_matched_aggregated_hotellings_allactiveTRTS_lambda=11.pdf}
+\subcaption{\textsl{first data set ($\lambda =11$)}\label{distt10501_agg2}}
+\end{minipage}
+
+\begin{minipage}{.425\textwidth}
+\centering
+\includegraphics[width=1\linewidth]{D2_LOG_matched_aggregated_hotellings_allactiveTRTS_lambda=0point1.pdf}
+\subcaption{\textsl{second data set ($\lambda =0.1$)}\label{distt10501_agg3}}
+\end{minipage}
+\begin{minipage}{.425\textwidth}
+\centering
+\includegraphics[width=1\linewidth]{D2_LOG_matched_aggregated_hotellings_allactiveTRTS_lambda=0point5.pdf}
+\subcaption{\textsl{second data set ($\lambda =0.5$)}\label{distt10501_agg4}}
+\end{minipage}
+\caption{Distribution of T$^2$ statistics comparing untransformed, cell and well level performance}
+\label{distt10501_agg}
+\end{figure}
+
+\clearpage
+\begin{figure}[ht!] % 
+\centering
+\begin{minipage}{.495\textwidth}
+\centering
+\includegraphics[width=1\linewidth]{aggregated_auc10point5.pdf}
+% \caption*{First data set ($\lambda = 10.5$)}
+\subcaption{\textsl{First data set ($\lambda =10.5$)}\label{agg_allbox1}}
+\end{minipage}
+\begin{minipage}{.495\textwidth}
+\centering
+\includegraphics[width=1\linewidth]{aggregated_auc11.pdf}
+\subcaption{\textsl{First data set ($\lambda =11$)}\label{agg_allbox2}}
+\end{minipage}
+
+\begin{minipage}{.495\textwidth}
+\centering
+\includegraphics[width=1\linewidth]{D2_aggregated_auc0point1.pdf}
+\subcaption{\textsl{Second data set ($\lambda =0.1$)}\label{agg_allbox3}}
+\end{minipage}
+\begin{minipage}{.495\textwidth}
+\centering
+\includegraphics[width=1\linewidth]{D2_aggregated_auc0point5}
+\subcaption{\textsl{Second data set ($\lambda =0.5$)}\label{agg_allbox4}}
+\end{minipage}
+\caption{Boxplots of AUC values across runs for untransformed, cell and well level transformed data}
+\label{agg_allbox}
+\end{figure}
+
+\clearpage
+\section{Discussion and Conclusion}\label{discussconclude}
+\par{The primary objective of this study was to investigate effects of glog transformations on separation of treatment replicates from non-replicates. Two approaches were explored- using the Hotelling's T$^2$ statistic and assessment by AUC approach. In both data sets using both approaches, a few transformations led to slight improvement in treatments separation while some other transformations showed no improvement beyond what was observed before transformation. In cases where improvement was observed, the improvement was often very small that respective boxplots were indistinguishable. Our findings suggest that transformations in general failed to authoritatively improve separation of treatment replicates from non-replicates beyond results observed when data was untransformed. This findings compare unfavourably with findings in other settings that showed improved classification results after applying glog transformations \cite{Purohit2004, Parsons2007}.}
+\par{The inability of transformations to improve treatments separation was possibly influenced by multiple factors. Firstly, applying the same transformation across all features was clearly not optimal in regards to improving respective lack of normality in their distributions. Feature-specific distributions showed no improvement in distributions after transformations and therefore similar problems that were undermining treatments separation using multivariate classification methods were still present even after transformations. We hypothesize that for glog transformations to improve treatments separation, feature-specific transformations should be applied to address lack of normality seen at feature level. Secondly, improvement in separation, even though insignificant, was observed at specific ranges of $\lambda$ values. While we did not explicitly determine the maximum likelihood $\lambda$ estimate, results done using MLE $\lambda$ values \cite{Parsons2007} led to improved classification results. We therefore encourage future studies to be transformed at optimal $\lambda$ values for respective features. Thirdly, the small improvements in treatment separation for transformations compared to untransformed cases was largely due to efficient feature selection algorithms such that even when untransformed, treatments separation was already impressive. This means that transformations were left with a very small window of improving treatments separation over what was achieved in untransformed cases. Only an extremely efficient transformation would have separated treatments better.}
+
+\par{Our findings suggest that effect of transformations on the proportion of actively-called treatments is cell-line specific. While in the first data set transformations led to a slight decrease in the proportion of actively-called treatments, similar transformations were associated with increased proportions of actively-called treatments in the second data set. Further, the number of features selected highly influenced the proportion of actively-called treatments. In the first data set where the number of features selected was often higher than number of features selected pre-transformation, the associated proportion of actively-called treatments was in general lower than the proportion pre-transformation. For the second data set, where number of features selected was higher than in untransformed case, the proportion of actively-called treatments was higher than in untransformed case, but comparatively lower than for the set of transformations that selected less features in comparison with the untransformed case. This relationship between number of features selected and proportion of active treatments exists because an optimal features set containing more features leads to a higher precision in treatments discrimination and therefore only undoubtedly better treatments than the DMSO control are selected as active.}
+
+\par{This study found no preference in applying transformations on single cell data to aggregated data using both the Hotelling's T$^2$ and AUC approaches. While some transformations showed small improvements (and in others, small declines) in treatments separation when transformations were applied at single cell level compared to well-level, the differences were consistently minimal and not-significant. The lack of inclination towards single-cell or well level transformation was likely influenced by failure of transformations to address feature-specific lack of normality and the high treatments separation achieved due to selection of highly effective features at all levels of transformation. As was observed for untransformed cases, selection of a highly effective set of features discriminates treatment replicates from non-replicates admirably well regardless of whether a transformation was applied or not. }
+\par{Lastly, but certainly not the least, settling on top 10 ranked features from MRMR for calculation of Hotelling's T$^2$ statistic was a convenient and mutually agreed choice across all $\lambda$-transformations. We recognize that firstly, it was practically possible to use up to 16 of the selected features while still guarding against treatment pairs with 9 replicates apiece as motivated for in section \ref{hoteli}. And secondly, at every $\lambda$ transformation, it was possible to determine the number of replicates needed that would have maximized treatment pairs separation and avoid subjecting all transformations to same feature dimension restrictions. A future study could endeavor to address these.}
+\clearpage
+\bibliographystyle{IEEEtran}
+\bibliography{vst_ref}
+% 
+\clearpage
+\section{Appendix}
+%%%%%% ALPHAS %%%%%%%%%%%%%
+
+\begin{longtable}{p{.5\textwidth}  p{.1\textwidth} p{.1\textwidth}  p{.1\textwidth} p{.1\textwidth}} \\ 
+\caption{mean $\alpha$ values calculated at cell \& well levels for both data sets} \\
+\label{alpharatios}
+& \multicolumn{2}{c}{\textbf{Data set 1}} & \multicolumn{2}{c}{\textbf{Data set 2 }} \\  % $\alpha$
+{Feature} & {cell} & {well} & {cell} & {well} \\
+\midrule
+Ratio\_Nuc2Cyto\_GFP\_TotalInt & 1.87 & 1.95 & 1.58 & 1.7 \\ 
+  Cyto\_NucCytoBFP\_SERDark\_0 & 179.85 & 182.29 & 159.88 & 162.08 \\ 
+  Nuc\_NucCytoBFP\_SERHole\_1 & 1.2 & 1.21 & 1.28 & 1.28 \\ 
+  Nuc\_RFP\_SERSaddle\_2 & 9.03 & 9.01 & 26.48 & 26.48 \\ 
+  Nuc\_NucCytoBFP\_LogTotalIntBC & 5.56 & 5.56 & 5.34 & 5.34 \\ 
+  Nuc\_GFP\_SERSaddle\_2 & 11.76 & 11.71 & 11.46 & 11.52 \\ 
+  Nuc\_NucCytoBFP\_LogMeanInt & 3.06 & 3.06 & 2.88 & 2.88 \\ 
+  Cell\_GFP\_MeanIntBC & 3932.4 & 3922.84 & 390.1 & 388.05 \\ 
+  Cell\_RFP\_StdIntBC & 155.95 & 157.05 & 141.03 & 139.99 \\ 
+  Nuc\_NucCytoBFP\_SERDark\_1 & 7.27 & 7.34 & 6 & 6.06 \\ 
+  Cell\_RFP\_SERBright\_0 & 153.97 & 154.23 & 313.11 & 313.09 \\ 
+  Ratio\_Nuc2Cell\_Area & 0.56 & 0.57 & 0.49 & 0.5 \\ 
+  Nuc\_GFP\_SERDark\_1 & 42.72 & 42.03 & 40.39 & 39.9 \\ 
+  Ratio\_Nuc2Cyto\_NucCytoBFP\_TotalIntBC & 4.49 & 4.66 & 2.72 & 2.87 \\ 
+  Ratio\_Nuc2Cell\_NucCytoBFP\_LogTotalInt & 0.98 & 0.98 & 0.96 & 0.96 \\ 
+  Cell\_RFP\_SERHole\_4 & 0.3 & 0.29 & 2.4 & 2.3 \\ 
+  Cyto\_GFP\_SERSpot\_2 & 7.53 & 7.69 & 6.36 & 6.44 \\ 
+  Cyto\_GFP\_CVInt & 0.41 & 0.42 & 0.52 & 0.53 \\ 
+  Cell\_RFP\_SERRidge\_4 & 3.94 & 4.01 & 6.79 & 6.77 \\ 
+  Cyto\_RFP\_SERHole\_1 & 8.63 & 8.74 & 16.42 & 16.43 \\ 
+  Nuc\_GFP\_SERBright\_0 & 99.54 & 101.95 & 164.64 & 165.98 \\ 
+  Nuc\_GFP\_SERSpot\_2 & 4.99 & 5.21 & 4.28 & 4.57 \\ 
+  Ratio\_Nuc2Cyto\_NucCytoBFP\_LogMeanInt & 1.13 & 1.13 & 1.1 & 1.11 \\ 
+  Cell\_NucCytoBFP\_SERRidge\_0 & 52.45 & 52.68 & 56.95 & 57.36 \\ 
+  Nuc\_GFP\_SERSaddle\_0 & 44.41 & 44.85 & 62.82 & 63.07 \\ 
+  Cell\_RFP\_SEREdge\_1 & 97.56 & 98.62 & 209.17 & 208.86 \\ 
+  Ratio\_Nuc2Cyto\_GFP\_TotalIntBC & 1.9 & 1.98 & 1.81 & 1.97 \\ 
+  Cell\_RFP\_SERSaddle\_1 & 21.65 & 21.73 & 62.3 & 62.33 \\ 
+  Cyto\_GFP\_SERValley\_0 & 82.06 & 84.9 & 120.28 & 124.34 \\ 
+  Cell\_RFP\_LogMeanIntBC & 2.45 & 2.45 & 2 & 2 \\ 
+  Cell\_RFP\_SERDark\_1 & 22.83 & 22.87 & 77.08 & 76.74 \\ 
+  Ratio\_Nuc2Cell\_RFP\_MeanIntBC & 1.15 & 1.16 & 0.76 & 0.78 \\ 
+  Cyto\_GFP\_SERRidge\_0 & 83.3 & 84.66 & 99.19 & 99.47 \\ 
+  Cell\_NucCytoBFP\_LogMeanIntBC & 2.89 & 2.88 & 2.67 & 2.66 \\ 
+  Nuc\_RFP\_SERRidge\_0 & 78.23 & 78.43 & 171.11 & 171.64 \\ 
+  Cyto\_NucCytoBFP\_SERBright\_2 & 3.55 & 3.6 & 2.45 & 2.5 \\ 
+  Cyto\_NucCytoBFP\_LogMeanIntBC & 2.6 & 2.6 & 2.47 & 2.45 \\ 
+  Nuc\_ShapeSize\_Symmetry03 & 0.08 & 0.08 & 0.07 & 0.07 \\ 
+  Cyto\_GFP\_SERSaddle\_0 & 61.35 & 62.9 & 75.18 & 76.59 \\ 
+  Cyto\_NucCytoBFP\_SERRidge\_4 & 0.75 & 0.77 & 0.46 & 0.48 \\ 
+  Ratio\_Nuc2Cell\_RFP\_LogTotalIntBC & 0.96 & 0.96 & 0.9 & 0.91 \\ 
+  Cell\_RFP\_SERSpot\_1 & 12.24 & 12.34 & 33.22 & 33.19 \\ 
+  Cell\_NucCytoBFP\_SEREdge\_1 & 115.57 & 116.86 & 82.22 & 84.09 \\ 
+  Ratio\_Nuc2Cell\_RFP\_LogMeanIntBC & 1.02 & 1.03 & 0.92 & 0.93 \\ 
+  Cyto\_NucCytoBFP\_TotalIntBC & 139131.63 & 137047.71 & 136886.18 & 130551.33 \\ 
+  Cell\_GFP\_StdIntBC & 1548.73 & 1552.36 & 196.15 & 197.7 \\ 
+  Ratio\_Nuc2Cell\_NucCytoBFP\_TotalIntBC & 0.75 & 0.76 & 0.67 & 0.68 \\ 
+  Nuc\_NucCytoBFP\_SERBright\_2 & 20.41 & 20.54 & 15.74 & 15.91 \\ 
+  Nuc\_RFP\_SERDark\_0 & 136.47 & 136.06 & 367.68 & 363.23 \\ 
+  Cell\_GFP\_SERBright\_2 & 24.53 & 25 & 19.57 & 20.12 \\ 
+  Ratio\_Nuc2Cell\_NucCytoBFP\_TotalInt & 0.73 & 0.74 & 0.63 & 0.64 \\ 
+  Cell\_GFP\_CVInt & 0.44 & 0.44 & 0.44 & 0.45 \\ 
+  Cyto\_GFP\_SEREdge\_2 & 139.06 & 142.95 & 118.24 & 124.15 \\ 
+  Nuc\_ShapeSize\_Symmetry04 & 0.07 & 0.07 & 0.06 & 0.06 \\ 
+  Cell\_GFP\_SERSpot\_2 & 6.79 & 6.98 & 5.79 & 6 \\ 
+  Cyto\_RFP\_SERBright\_1 & 26.57 & 26.46 & 81.76 & 80.5 \\ 
+  Ratio\_Nuc2Cell\_NucCytoBFP\_LogTotalIntBC & 0.98 & 0.98 & 0.97 & 0.97 \\ 
+  Cell\_RFP\_SERDark\_4 & 1.98 & 1.93 & 8.04 & 7.88 \\ 
+  Cell\_RFP\_SEREdge\_4 & 51.77 & 52.43 & 72.69 & 72.55 \\ 
+  Nuc\_ShapeSize\_Symmetry15 & 0.07 & 0.07 & 0.06 & 0.06 \\ 
+  Nuc\_ShapeSize\_Perimeter & 66.79 & 67.1 & 63.76 & 64.2 \\ 
+  Nuc\_ShapeSize\_Symmetry05 & 0.04 & 0.04 & 0.04 & 0.04 \\ 
+  Nuc\_RFP\_SERBright\_2 & 14.28 & 14.61 & 21.21 & 21.85 \\ 
+  Ratio\_Nuc2Cell\_RFP\_MeanInt & 1.1 & 1.11 & 0.85 & 0.87 \\ 
+  Cyto\_RFP\_SERHole\_2 & 1.78 & 1.78 & 3.93 & 3.92 \\ 
+  Nuc\_ShapeSize\_Symmetry13 & 0.12 & 0.12 & 0.11 & 0.11 \\ 
+  Cyto\_GFP\_SERBright\_0 & 126.95 & 129.39 & 171.45 & 171.79 \\ 
+  Cyto\_GFP2RFP\_PearsonCor & 0.52 & 0.53 & 0.57 & 0.58 \\ 
+  Cell\_GFP\_SERHole\_4 & 1.77 & 1.72 & 1.35 & 1.3 \\ 
+  Cell\_ShapeSize\_Symmetry15 & 0.1 & 0.1 & 0.1 & 0.1 \\ 
+  Cyto\_RFP\_SERValley\_2 & 13.34 & 13.72 & 21.86 & 22.52 \\ 
+  Nuc\_GFP\_StdInt & 1255.11 & 1266.65 & 149.4 & 151.02 \\ 
+  Cyto\_RFP\_SERHole\_4 & 0.49 & 0.48 & 0.89 & 0.89 \\ 
+  Cell\_NucCytoBFP\_SERHole\_4 & 0.39 & 0.37 & 0.48 & 0.46 \\ 
+  Cell\_GFP\_SERSpot\_1 & 13.33 & 13.65 & 14.29 & 14.52 \\ 
+  Cell\_RFP\_SERSaddle\_0 & 52.41 & 52.51 & 140.72 & 140.48 \\ 
+  Nuc\_NucCytoBFP\_TotalIntBC & 434327.92 & 436627.2 & 255088.81 & 253135.07 \\ 
+  Nuc\_NucCytoBFP\_SERDark\_2 & 1.37 & 1.38 & 0.95 & 0.96 \\ 
+  Cell\_ShapeSize\_Symmetry12 & 0.3 & 0.3 & 0.31 & 0.31 \\ 
+  Cyto\_NucCytoBFP\_SERRidge\_1 & 12.16 & 12.35 & 8.77 & 8.93 \\ 
+  Nuc\_RFP\_SERValley\_0 & 74.31 & 74.15 & 231.69 & 228.95 \\ 
+  Nuc\_NucCytoBFP\_SERSaddle\_0 & 28.86 & 29.02 & 29.09 & 29.35 \\ 
+  Ratio\_Nuc2Cyto\_RFP\_MeanIntBC & 1.76 & 1.8 & 0.99 & 1.07 \\ 
+  Cyto\_NucCytoBFP\_StdIntBC & 217.33 & 217.37 & 126.1 & 127.45 \\ 
+  Cyto\_RFP\_SEREdge\_2 & 106.48 & 108.98 & 127.04 & 128.22 \\ 
+  Nuc\_GFP\_SERValley\_2 & 16.32 & 15.88 & 12.65 & 12.41 \\ 
+  Ratio\_Nuc2Cyto\_RFP\_LogMeanInt & 1.05 & 1.05 & 0.95 & 0.96 \\ 
+  Ratio\_Nuc2Cyto\_RFP\_TotalIntBC & 3.1 & 3.24 & 1.74 & 1.94 \\ 
+  Cyto\_NucCytoBFP\_SEREdge\_4 & 122.96 & 125.81 & 70.44 & 73.18 \\ 
+  Cyto\_GFP\_TotalIntBC & 1246167.21 & 1217248.5 & 153694.96 & 146484.77 \\ 
+  Ratio\_Nuc2Cell\_RFP\_TotalIntBC & 0.65 & 0.66 & 0.39 & 0.41 \\ 
+  Ratio\_Nuc2Cyto\_NucCytoBFP\_LogTotalIntBC & 1.11 & 1.11 & 1.07 & 1.07 \\ 
+  Nuc\_ShapeSize\_MajorAxisLength & 13.75 & 13.81 & 13.1 & 13.2 \\ 
+  Ratio\_Nuc2Cell\_GFP\_TotalIntBC & 0.54 & 0.55 & 0.52 & 0.53 \\ 
+  Cell\_NucCytoBFP\_SERSpot\_2 & 8.96 & 9.08 & 6.27 & 6.4 \\ 
+  Cell\_RFP\_SERValley\_2 & 7.38 & 7.38 & 25.21 & 25.09 \\ 
+  Cell\_NucCytoBFP\_SERSaddle\_4 & 6.63 & 6.68 & 4.78 & 4.89 \\ 
+  Nuc\_RFP\_CVInt & 0.24 & 0.24 & 0.66 & 0.66 \\ 
+  Cyto\_NucCytoBFP\_SERDark\_2 & 35.09 & 35.53 & 21.91 & 22.33 \\ 
+  Cell\_GFP\_MeanInt & 3967.38 & 3956.27 & 446.62 & 444.08 \\ 
+  Nuc\_RFP\_LogMeanIntBC & 2.51 & 2.51 & 1.85 & 1.86 \\ 
+  Cyto\_RFP\_LogMeanInt & 2.53 & 2.52 & 2.26 & 2.25 \\ 
+  Cell\_GFP\_SERSpot\_4 & 3.77 & 3.88 & 2.64 & 2.78 \\ 
+  Cell\_NucCytoBFP\_SERRidge\_4 & 4.6 & 4.68 & 2.91 & 3.02 \\ 
+  Cyto\_NucCytoBFP\_SERDark\_1 & 66.49 & 67.63 & 40.5 & 41.35 \\ 
+  Cyto\_GFP\_SERBright\_4 & 10.24 & 10.37 & 6.91 & 6.99 \\ 
+  Cell\_GFP\_SERBright\_1 & 46.23 & 47.11 & 44.14 & 44.98 \\ 
+  Cell\_RFP\_LogMeanInt & 2.61 & 2.61 & 2.22 & 2.22 \\ 
+  Cell\_NucCytoBFP\_TotalIntBC & 573459.54 & 573674.91 & 391974.99 & 383686.4 \\ 
+  Ratio\_Nuc2Cyto\_RFP\_LogMeanIntBC & 1.09 & 1.1 & 0.92 & 0.94 \\ 
+  Nuc\_GFP\_TotalInt & 1484125.46 & 1503997.72 & 168438.26 & 170452.46 \\ 
+  Nuc\_NucCytoBFP2GFP\_PearsonCor & -0.51 & -0.51 & -0.43 & -0.41 \\ 
+  Nuc\_GFP\_SERDark\_0 & 103.85 & 103.96 & 162.32 & 161.56 \\ 
+  Cyto\_GFP\_SERHole\_0 & 46.82 & 48.29 & 99.07 & 100.77 \\ 
+  Nuc\_ShapeSize\_Roundness & 0.89 & 0.89 & 0.91 & 0.91 \\ 
+  Nuc\_RFP\_TotalIntBC & 136057.7 & 137639.83 & 31607.08 & 32843.4 \\ 
+  Cell\_ShapeSize\_Symmetry03 & 0.1 & 0.1 & 0.11 & 0.11 \\ 
+  Ratio\_Nuc2Cyto\_NucCytoBFP\_LogTotalInt & 1.09 & 1.1 & 1.05 & 1.06 \\ 
+  Cell\_GFP\_SERDark\_1 & 31.37 & 31.47 & 39.97 & 40.39 \\ 
+  Nuc\_NucCytoBFP\_SERRidge\_2 & 11.9 & 11.97 & 8.94 & 9.05 \\ 
+  Cyto\_RFP\_SERValley\_4 & 3.95 & 4 & 5.38 & 5.52 \\ 
+  Cell\_NucCytoBFP\_LogMeanInt & 2.94 & 2.94 & 2.76 & 2.76 \\ 
+  Cyto\_GFP\_SERSaddle\_4 & 7.88 & 8.02 & 6.69 & 7.04 \\ 
+  Nuc\_ShapeSize\_Symmetry14 & 0.1 & 0.1 & 0.09 & 0.09 \\ 
+  Nuc\_GFP2RFP\_PearsonCor & 0.25 & 0.25 & 0.51 & 0.51 \\ 
+  Cell\_NucCytoBFP\_SERHole\_1 & 3.56 & 3.55 & 3.75 & 3.73 \\ 
+  Cyto\_GFP\_SERHole\_1 & 7.68 & 7.89 & 11.71 & 11.77 \\ 
+  Cell\_GFP\_SERSaddle\_1 & 24.42 & 24.67 & 28.01 & 28.23 \\ 
+  Cyto\_RFP\_SERSpot\_2 & 4.8 & 4.77 & 13.17 & 13.07 \\ 
+  Nuc\_RFP\_SERDark\_1 & 19.77 & 19.6 & 104.74 & 102.15 \\ 
+  Ratio\_Nuc2Cyto\_RFP\_LogTotalIntBC & 1.07 & 1.08 & 0.96 & 0.97 \\ 
+  Cyto\_RFP\_SEREdge\_1 & 136.06 & 139.05 & 199.4 & 199.7 \\ 
+  Cyto\_GFP\_SERSpot\_1 & 15.98 & 16.32 & 15.28 & 15.28 \\ 
+  Nuc\_NucCytoBFP\_SERValley\_2 & 1.47 & 1.48 & 1.04 & 1.05 \\ 
+  Cyto\_RFP\_SERValley\_1 & 30.96 & 31.83 & 60.65 & 61.72 \\ 
+  Cyto\_RFP\_LogTotalInt & 4.95 & 4.94 & 4.8 & 4.78 \\ 
+  Cell\_RFP\_SERValley\_1 & 18.95 & 19.01 & 66.11 & 65.91 \\ 
+  Cell\_RFP\_MeanInt & 422.58 & 422.66 & 174.33 & 173.51 \\ 
+  Cell\_GFP\_SERBright\_0 & 112.42 & 114.71 & 169.2 & 170.18 \\ 
+  Cell\_RFP\_SERHole\_2 & 1.63 & 1.61 & 7.48 & 7.34 \\ 
+  Cell\_RFP\_SERRidge\_1 & 22.21 & 22.44 & 55.19 & 55.02 \\ 
+  Cyto\_NucCytoBFP\_MeanIntBC & 441.37 & 435.06 & 321.63 & 315.04 \\ 
+  Cyto\_GFP\_StdIntBC & 1395.53 & 1399.42 & 205.16 & 206.12 \\ 
+  Cell\_NucCytoBFP\_SERValley\_2 & 9.15 & 9.09 & 7.69 & 7.64 \\ 
+  Nuc\_GFP\_SERHole\_0 & 54.75 & 54.91 & 95.55 & 94.92 \\ 
+  Cell\_NucCytoBFP\_SERRidge\_1 & 18.67 & 18.84 & 14.18 & 14.38 \\ 
+  Nuc\_RFP\_SEREdge\_0 & 123.91 & 124.6 & 346.45 & 344.55 \\ 
+  Cyto\_GFP\_LogMeanIntBC & 3.48 & 3.47 & 2.5 & 2.48 \\ 
+  Cyto\_NucCytoBFP\_SERBright\_4 & 0.73 & 0.74 & 0.47 & 0.49 \\ 
+  Nuc\_NucCytoBFP\_SERRidge\_1 & 20.87 & 20.96 & 16.98 & 17.08 \\ 
+  Nuc\_RFP\_LogTotalInt & 5.19 & 5.2 & 4.67 & 4.68 \\ 
+  Nuc\_NucCytoBFP\_SERSpot\_1 & 16.83 & 16.91 & 13.27 & 13.37 \\ 
+  Cell\_GFP\_LogMeanInt & 3.51 & 3.51 & 2.62 & 2.62 \\ 
+  Ratio\_Nuc2Cell\_GFP\_MeanIntBC & 0.94 & 0.95 & 1.04 & 1.05 \\ 
+  Cell\_NucCytoBFP\_CVIntBC & 0.53 & 0.54 & 0.48 & 0.48 \\ 
+  Nuc\_RFP\_SERDark\_2 & 6.76 & 6.64 & 46.77 & 45.1 \\ 
+  Nuc\_RFP\_LogMeanInt & 2.65 & 2.65 & 2.14 & 2.14 \\ 
+  Cell\_NucCytoBFP\_SERDark\_0 & 91.51 & 91.64 & 108.63 & 109.12 \\ 
+  Nuc\_NucCytoBFP\_SERSaddle\_2 & 7.49 & 7.56 & 5.25 & 5.38 \\ 
+  Nuc\_NucCytoBFP\_SERSaddle\_1 & 12.83 & 12.95 & 10.13 & 10.29 \\ 
+  Cyto\_RFP\_SERSaddle\_4 & 7.53 & 7.74 & 8.41 & 8.52 \\ 
+  Cyto\_NucCytoBFP\_SERHole\_1 & 11.32 & 11.5 & 8.63 & 8.78 \\ 
+  Nuc\_NucCytoBFP\_SERHole\_0 & 37.24 & 37.31 & 51.3 & 51.78 \\ 
+  Cell\_GFP\_TotalIntBC & 2716768.37 & 2708212.06 & 301393.56 & 296205.84 \\ 
+  Cell\_NucCytoBFP\_SERValley\_1 & 18.96 & 18.96 & 15.26 & 15.24 \\ 
+  Nuc\_GFP\_MeanInt & 3747.03 & 3764.73 & 458.99 & 460.5 \\ 
+  Cyto\_RFP\_SERRidge\_0 & 85.16 & 85.43 & 175.61 & 175.08 \\ 
+  Nuc\_RFP\_SERSaddle\_0 & 49.36 & 49.39 & 147.05 & 146.46 \\ 
+  Cyto\_GFP\_SERHole\_2 & 1.9 & 1.9 & 3.4 & 3.42 \\ 
+  Cell\_RFP\_SEREdge\_0 & 139.56 & 140.58 & 324.32 & 323.73 \\ 
+  Cyto\_RFP\_StdIntBC & 154.9 & 154.44 & 153.26 & 151.26 \\ 
+  Cell\_GFP\_SERDark\_4 & 5.39 & 5.27 & 4.16 & 4.08 \\ 
+  Cell\_RFP\_LogTotalInt & 5.41 & 5.41 & 5.08 & 5.07 \\ 
+  Cell\_RFP\_SERSpot\_4 & 3.01 & 3.1 & 3.75 & 3.8 \\ 
+  Nuc\_GFP\_SEREdge\_0 & 168.53 & 168.93 & 175.58 & 177.03 \\ 
+  Nuc\_NucCytoBFP2RFP\_PearsonCor & 0.1 & 0.11 & -0.32 & -0.3 \\ 
+  Cell\_RFP\_SEREdge\_2 & 75.25 & 76.13 & 136.28 & 136.12 \\ 
+  Cyto\_NucCytoBFP\_SERRidge\_0 & 61.9 & 62.47 & 64.28 & 64.98 \\ 
+  Cyto\_RFP\_MeanInt & 356.11 & 352.79 & 195.61 & 191.89 \\ 
+  Nuc\_RFP\_TotalInt & 182408.62 & 184519.34 & 54209.52 & 55555.13 \\ 
+  Cell\_NucCytoBFP\_SERValley\_0 & 55.44 & 55.6 & 58.12 & 58.41 \\ 
+  Nuc\_GFP\_SERSaddle\_1 & 21.1 & 21.19 & 25.51 & 25.65 \\ 
+  Cell\_RFP\_SERHole\_1 & 7.04 & 7.01 & 21.25 & 21.07 \\ 
+  Cyto\_GFP\_MeanInt & 4034.8 & 3985.16 & 422.99 & 414.02 \\ 
+  Cell\_NucCytoBFP\_StdInt & 427.1 & 429.75 & 235.01 & 235.32 \\ 
+  Cyto\_RFP\_SERSaddle\_0 & 60.6 & 61.11 & 138.59 & 138.46 \\ 
+  Nuc\_GFP\_CVInt & 0.37 & 0.37 & 0.32 & 0.33 \\ 
+  Cyto\_GFP\_SEREdge\_1 & 186.3 & 191.99 & 163.01 & 170.2 \\ 
+  Nuc\_RFP\_SERSaddle\_1 & 19.69 & 19.7 & 63.55 & 63.54 \\ 
+  Nuc\_RFP\_SERRidge\_2 & 10.84 & 11.05 & 16.68 & 17.11 \\ 
+  Ratio\_Nuc2Cyto\_RFP\_MeanInt & 1.39 & 1.4 & 0.86 & 0.89 \\ 
+  Nuc\_RFP\_SERValley\_1 & 15.7 & 15.59 & 87.31 & 85.21 \\ 
+  Cyto\_NucCytoBFP\_SERBright\_0 & 109.62 & 110.48 & 121.93 & 123.05 \\ 
+  Cell\_NucCytoBFP\_SERHole\_0 & 49.8 & 49.77 & 66.88 & 67.15 \\ 
+  Cell\_NucCytoBFP\_LogTotalIntBC & 5.69 & 5.68 & 5.53 & 5.52 \\ 
+  Cyto\_GFP\_LogTotalInt & 5.93 & 5.91 & 5.13 & 5.1 \\ 
+  Cell\_NucCytoBFP\_SEREdge\_0 & 136.49 & 137.81 & 107.71 & 109.5 \\ 
+  Cell\_ShapeSize\_Symmetry02 & 0.21 & 0.21 & 0.22 & 0.22 \\ 
+  Ratio\_Nuc2Cell\_GFP\_LogTotalInt & 0.95 & 0.95 & 0.94 & 0.94 \\ 
+  Nuc\_RFP\_SERBright\_1 & 30.09 & 30.54 & 61.19 & 62.43 \\ 
+  Nuc\_RFP\_StdIntBC & 112.43 & 113.52 & 97.89 & 99.22 \\ 
+  Cell\_GFP\_SERRidge\_4 & 7.59 & 7.71 & 5.17 & 5.3 \\ 
+  Cell\_RFP\_SERRidge\_2 & 10.37 & 10.52 & 22.37 & 22.3 \\ 
+  Cyto\_NucCytoBFP\_SERHole\_4 & 1.37 & 1.33 & 1.32 & 1.29 \\ 
+  Cell\_ShapeSize\_Area & 695.44 & 694.98 & 795.4 & 785.41 \\ 
+  Cell\_NucCytoBFP\_SERHole\_2 & 1.02 & 1 & 0.97 & 0.95 \\ 
+  Ratio\_Nuc2Cyto\_RFP\_TotalInt & 2.28 & 2.37 & 1.15 & 1.25 \\ 
+  Nuc\_RFP\_SERSpot\_2 & 5.44 & 5.59 & 7.56 & 7.87 \\ 
+  Cyto\_NucCytoBFP\_SERValley\_2 & 36.02 & 36.54 & 22 & 22.46 \\ 
+  Ratio\_Nuc2Cyto\_NucCytoBFP\_MeanInt & 2.32 & 2.34 & 1.91 & 1.91 \\ 
+  Cell\_NucCytoBFP\_SEREdge\_4 & 71.49 & 72.37 & 51.26 & 52.54 \\ 
+  Ratio\_Nuc2Cell\_NucCytoBFP\_MeanIntBC & 1.36 & 1.36 & 1.4 & 1.39 \\ 
+  Cyto\_RFP\_SERRidge\_2 & 8.12 & 8.09 & 24.23 & 23.81 \\ 
+  Cyto\_GFP\_SERSpot\_0 & 62.26 & 63.7 & 98.23 & 98.34 \\ 
+  Cyto\_RFP\_LogTotalIntBC & 4.73 & 4.72 & 4.58 & 4.55 \\ 
+  Cyto\_RFP\_SEREdge\_0 & 178.93 & 181.91 & 314.8 & 314.33 \\ 
+  Cell\_RFP\_SERBright\_1 & 30.11 & 30.4 & 77.07 & 76.88 \\ 
+  Cyto\_NucCytoBFP2GFP\_PearsonCor & 0.59 & 0.6 & 0.55 & 0.56 \\ 
+  Cyto\_NucCytoBFP\_CVIntBC & 0.52 & 0.53 & 0.42 & 0.44 \\ 
+  Nuc\_NucCytoBFP\_SERBright\_1 & 32.75 & 32.9 & 26.28 & 26.45 \\ 
+  Cell\_GFP\_SERSaddle\_2 & 12.77 & 12.81 & 12.61 & 12.8 \\ 
+  Ratio\_Nuc2Cyto\_GFP\_LogTotalInt & 1.02 & 1.02 & 1.01 & 1.02 \\ 
+  Nuc\_NucCytoBFP\_SERRidge\_0 & 49.33 & 49.52 & 52.65 & 53.07 \\ 
+  Nuc\_GFP\_SEREdge\_1 & 136.38 & 136.04 & 122.07 & 123.21 \\ 
+  Cell\_ShapeSize\_Symmetry14 & 0.13 & 0.13 & 0.14 & 0.14 \\ 
+  Cyto\_RFP\_SERSpot\_1 & 11.1 & 11.04 & 35.61 & 35.14 \\ 
+  Cell\_NucCytoBFP\_SERBright\_4 & 8.17 & 8.32 & 5.4 & 5.57 \\ 
+  Cyto\_NucCytoBFP\_SERBright\_1 & 15.84 & 16.1 & 11.28 & 11.45 \\ 
+  Cell\_NucCytoBFP\_MeanInt & 911.79 & 912.09 & 610.08 & 605.32 \\ 
+  Nuc\_RFP\_SERBright\_0 & 149.23 & 149.54 & 308.76 & 309.5 \\ 
+  Cell\_NucCytoBFP\_SERBright\_0 & 99.97 & 100.36 & 113.24 & 114.05 \\ 
+  Nuc\_GFP\_TotalIntBC & 1470601.16 & 1490963.55 & 147698.6 & 149721.07 \\ 
+  Cyto\_RFP\_SERDark\_2 & 13.36 & 13.69 & 22.84 & 23.43 \\ 
+  Cell\_ShapeSize\_MinorAxisLength & 12.24 & 12.24 & 13.06 & 12.98 \\ 
+  Cyto\_RFP\_TotalIntBC & 74001.37 & 72177.81 & 56791.37 & 54180.59 \\ 
+  Cyto\_RFP\_CVIntBC & 0.7 & 0.71 & 1.26 & 1.28 \\ 
+  Ratio\_Nuc2Cell\_NucCytoBFP\_LogMeanInt & 1.04 & 1.04 & 1.04 & 1.04 \\ 
+  Nuc\_GFP\_SERValley\_0 & 64.59 & 64.55 & 91.3 & 91.05 \\ 
+  Cell\_NucCytoBFP\_LogTotalInt & 5.74 & 5.74 & 5.62 & 5.61 \\ 
+  Cell\_GFP\_SERDark\_0 & 94.51 & 95.97 & 165.7 & 166.4 \\ 
+  Nuc\_NucCytoBFP\_StdInt & 312.53 & 316.28 & 157.95 & 160.44 \\ 
+  Ratio\_Nuc2Cell\_RFP\_TotalInt & 0.62 & 0.63 & 0.43 & 0.44 \\ 
+  Nuc\_GFP\_SERDark\_2 & 24.12 & 23.52 & 17.72 & 17.34 \\ 
+  Cyto\_GFP\_SERRidge\_1 & 42.17 & 42.57 & 34.54 & 34.49 \\ 
+  Cyto\_GFP\_SERRidge\_2 & 22.14 & 22.31 & 15.98 & 15.98 \\ 
+  Cyto\_GFP\_SERSaddle\_1 & 33.84 & 34.7 & 33.13 & 33.91 \\ 
+  Cell\_RFP\_SERHole\_0 & 87.9 & 87.86 & 158.05 & 158.29 \\ 
+  Cell\_GFP\_SERDark\_2 & 14.54 & 14.42 & 15.56 & 15.64 \\ 
+  Cell\_RFP\_SERValley\_0 & 80.51 & 80.57 & 202.25 & 201.88 \\ 
+  Cell\_GFP\_SERHole\_0 & 46.01 & 46.79 & 92.89 & 92.97 \\ 
+  Cyto\_GFP\_SERDark\_4 & 4.09 & 4.09 & 4.62 & 4.77 \\ 
+  Nuc\_NucCytoBFP\_SEREdge\_2 & 83.35 & 84.23 & 62.33 & 63.61 \\ 
+  Nuc\_NucCytoBFP\_SERSpot\_2 & 11.67 & 11.75 & 9.25 & 9.34 \\ 
+  Cell\_NucCytoBFP\_SERDark\_2 & 8.98 & 8.91 & 7.67 & 7.61 \\ 
+  Cyto\_NucCytoBFP\_SERValley\_1 & 62.89 & 63.99 & 36.83 & 37.64 \\ 
+  Nuc\_GFP\_SERRidge\_1 & 32.68 & 33.63 & 33.75 & 34.8 \\ 
+  Cyto\_GFP\_SERValley\_2 & 12.58 & 12.88 & 18.15 & 19.36 \\ 
+  Ratio\_Nuc2Cell\_GFP\_LogTotalIntBC & 0.95 & 0.95 & 0.94 & 0.94 \\ 
+  Nuc\_GFP\_SERRidge\_0 & 66.56 & 68.11 & 96.6 & 97.55 \\ 
+  Nuc\_NucCytoBFP\_SERValley\_1 & 7.08 & 7.15 & 5.56 & 5.62 \\ 
+  Cell\_NucCytoBFP2GFP\_PearsonCor & -0.15 & -0.14 & 0.11 & 0.13 \\ 
+  Cell\_GFP\_SERHole\_2 & 5.67 & 5.63 & 5.1 & 5.04 \\ 
+  Cyto\_GFP\_SERDark\_0 & 113.02 & 116.83 & 191 & 196.07 \\ 
+  Cyto\_NucCytoBFP\_SERSpot\_2 & 1.05 & 1.07 & 0.73 & 0.73 \\ 
+  Cyto\_RFP\_SERDark\_0 & 177.55 & 179.42 & 297.32 & 299.9 \\ 
+  Ratio\_Nuc2Cyto\_RFP\_LogTotalInt & 1.05 & 1.06 & 0.98 & 0.98 \\ 
+  Cell\_GFP\_StdInt & 1548.86 & 1552.5 & 196.31 & 197.86 \\ 
+  Cyto\_NucCytoBFP\_TotalInt & 168493.69 & 166435.45 & 183198.09 & 175507.17 \\ 
+  Ratio\_Nuc2Cell\_NucCytoBFP\_MeanInt & 1.32 & 1.32 & 1.32 & 1.32 \\ 
+  Nuc\_NucCytoBFP\_SERHole\_2 & 0.12 & 0.11 & 0.07 & 0.06 \\ 
+  Ratio\_Nuc2Cyto\_GFP\_MeanIntBC & 1.07 & 1.09 & 1.31 & 1.36 \\ 
+  Cell\_NucCytoBFP\_TotalInt & 640159.82 & 641247.79 & 477738.8 & 468384.18 \\ 
+  Cyto\_GFP\_SERRidge\_4 & 8.04 & 8.11 & 5.2 & 5.24 \\ 
+  Cell\_ShapeSize\_Eccentricity & 0.7 & 0.7 & 0.71 & 0.71 \\ 
+  Cyto\_RFP\_StdInt & 155.18 & 154.73 & 154.98 & 153.02 \\ 
+  Nuc\_ShapeSize\_MinorAxisLength & 9.06 & 9.1 & 9.05 & 9.05 \\ 
+  Cyto\_NucCytoBFP\_SEREdge\_1 & 190.26 & 194.93 & 106.73 & 111.21 \\ 
+  Nuc\_RFP\_SERSpot\_0 & 93.43 & 93.6 & 183.95 & 184.29 \\ 
+  Cell\_GFP\_SERRidge\_0 & 74.62 & 76.01 & 98.62 & 99.35 \\ 
+  Nuc\_NucCytoBFP\_CVInt & 0.26 & 0.26 & 0.2 & 0.2 \\ 
+  Nuc\_GFP\_LogMeanIntBC & 3.44 & 3.44 & 2.55 & 2.56 \\ 
+  Cell\_GFP\_SERValley\_4 & 4.35 & 4.26 & 3.4 & 3.37 \\ 
+  Cyto\_NucCytoBFP\_SERHole\_2 & 3.67 & 3.66 & 2.7 & 2.71 \\ 
+  Nuc\_ShapeSize\_Eccentricity & 0.7 & 0.7 & 0.67 & 0.67 \\ 
+  Cell\_ShapeSize\_Symmetry13 & 0.15 & 0.15 & 0.16 & 0.16 \\ 
+  Nuc\_NucCytoBFP\_LogMeanIntBC & 3.02 & 3.02 & 2.81 & 2.8 \\ 
+  Cyto\_RFP\_SERBright\_2 & 11.26 & 11.21 & 32.66 & 32.2 \\ 
+  Nuc\_NucCytoBFP\_StdIntBC & 312.53 & 316.28 & 157.95 & 160.44 \\ 
+  Cell\_ShapeSize\_Symmetry05 & 0.06 & 0.06 & 0.06 & 0.06 \\ 
+  Cell\_RFP\_TotalInt & 292930.7 & 292855.31 & 137484.67 & 135317.01 \\ 
+  Cyto\_GFP\_LogMeanInt & 3.51 & 3.5 & 2.58 & 2.57 \\ 
+  Cyto\_RFP\_SERRidge\_1 & 19.36 & 19.3 & 58.2 & 57.25 \\ 
+  Nuc\_RFP\_MeanIntBC & 345.85 & 346.95 & 84.74 & 87 \\ 
+  Cyto\_GFP\_SERHole\_4 & 0.49 & 0.47 & 0.89 & 0.89 \\ 
+  Cyto\_NucCytoBFP\_SERSpot\_4 & 0.09 & 0.09 & 0.08 & 0.08 \\ 
+  Cell\_NucCytoBFP\_SERRidge\_2 & 9.69 & 9.8 & 6.61 & 6.76 \\ 
+  Cyto\_NucCytoBFP\_SERHole\_0 & 90.48 & 91.3 & 96.76 & 97.9 \\ 
+  Nuc\_NucCytoBFP\_MeanInt & 1199.58 & 1197.62 & 806.65 & 796.65 \\ 
+  Cell\_RFP\_SERDark\_2 & 7.94 & 7.91 & 28.84 & 28.62 \\ 
+  Cell\_NucCytoBFP\_MeanIntBC & 815.79 & 814.77 & 502.54 & 497.91 \\ 
+  Cell\_RFP\_MeanIntBC & 303.39 & 303.13 & 112.7 & 112.16 \\ 
+  Cyto\_NucCytoBFP\_SERRidge\_2 & 3.01 & 3.05 & 2.08 & 2.12 \\ 
+  Nuc\_GFP\_SERBright\_1 & 37.95 & 39.11 & 40.23 & 41.53 \\ 
+  Nuc\_ShapeSize\_Area & 388.48 & 391.75 & 366.7 & 369.41 \\ 
+  Cyto\_GFP\_SERDark\_2 & 12.83 & 13.09 & 19.14 & 20.25 \\ 
+  Cell\_GFP\_SEREdge\_0 & 176.63 & 179.17 & 186.77 & 189.61 \\ 
+  Cell\_RFP\_SERSaddle\_2 & 10.55 & 10.59 & 25.47 & 25.53 \\ 
+  Nuc\_GFP\_LogTotalIntBC & 5.98 & 5.98 & 5.09 & 5.09 \\ 
+  Cell\_NucCytoBFP\_SEREdge\_2 & 98.54 & 99.69 & 69.82 & 71.54 \\ 
+  Cyto\_NucCytoBFP\_CVInt & 0.41 & 0.41 & 0.3 & 0.31 \\ 
+  Cell\_NucCytoBFP\_StdIntBC & 427.1 & 429.75 & 235 & 235.31 \\ 
+  Cell\_GFP\_LogTotalIntBC & 6.28 & 6.28 & 5.4 & 5.39 \\ 
+  Nuc\_NucCytoBFP\_SERBright\_0 & 96.47 & 96.76 & 107.27 & 108.11 \\ 
+  Cyto\_RFP\_SERDark\_4 & 3.87 & 3.89 & 5.52 & 5.64 \\ 
+  Ratio\_Nuc2Cyto\_GFP\_MeanInt & 1.06 & 1.08 & 1.21 & 1.25 \\ 
+  Cyto\_NucCytoBFP\_MeanInt & 537.37 & 532.38 & 429.17 & 422.45 \\ 
+  Cell\_NucCytoBFP\_SERSaddle\_0 & 35.83 & 36 & 35.24 & 35.46 \\ 
+  Nuc\_NucCytoBFP\_SERDark\_0 & 66.56 & 66.79 & 82.99 & 83.76 \\ 
+  Cyto\_NucCytoBFP\_LogMeanInt & 2.7 & 2.7 & 2.61 & 2.6 \\ 
+  Cyto\_NucCytoBFP\_SERValley\_0 & 116.07 & 118.04 & 87.3 & 88.68 \\ 
+  Cyto\_GFP\_TotalInt & 1256990.75 & 1227477.22 & 177979.17 & 169843.15 \\ 
+  Nuc\_ShapeSize\_Symmetry12 & 0.29 & 0.29 & 0.26 & 0.27 \\ 
+  Cell\_GFP\_LogMeanIntBC & 3.48 & 3.48 & 2.54 & 2.54 \\ 
+  Cyto\_GFP\_CVIntBC & 0.47 & 0.47 & 0.64 & 0.66 \\ 
+  Cyto\_RFP\_SERBright\_0 & 161.62 & 161.95 & 314.76 & 314.22 \\ 
+  Cell\_GFP\_LogTotalInt & 6.31 & 6.31 & 5.48 & 5.47 \\ 
+  Cell\_NucCytoBFP\_SERDark\_4 & 3 & 2.94 & 2.95 & 2.89 \\ 
+  Nuc\_RFP\_SERValley\_2 & 5.92 & 5.82 & 38.17 & 36.91 \\ 
+  Cell\_ShapeSize\_Roundness & 0.85 & 0.85 & 0.82 & 0.82 \\ 
+  Ratio\_Nuc2Cell\_NucCytoBFP\_LogMeanIntBC & 1.05 & 1.05 & 1.05 & 1.05 \\ 
+  Ratio\_Nuc2Cell\_GFP\_LogMeanInt & 0.99 & 0.99 & 1 & 1.01 \\ 
+  Nuc\_NucCytoBFP\_SERSpot\_0 & 61.68 & 61.83 & 70.67 & 71.21 \\ 
+  Cyto\_RFP\_SERRidge\_4 & 2.94 & 2.95 & 7.39 & 7.3 \\ 
+  Cell\_ShapeSize\_Symmetry04 & 0.08 & 0.08 & 0.09 & 0.09 \\ 
+  Nuc\_GFP\_MeanIntBC & 3712.05 & 3731.29 & 402.4 & 404.4 \\ 
+  Nuc\_GFP\_SEREdge\_2 & 106.92 & 106.14 & 83.81 & 84.41 \\ 
+  Nuc\_RFP\_SERHole\_1 & 6.89 & 6.81 & 31.39 & 30.57 \\ 
+  Cyto\_GFP\_SERDark\_1 & 35.04 & 36.21 & 52.09 & 54.99 \\ 
+  Cyto\_NucCytoBFP\_StdInt & 217.33 & 217.38 & 126.12 & 127.47 \\ 
+  Nuc\_RFP\_SERHole\_2 & 1.77 & 1.73 & 14.92 & 14.29 \\ 
+  Nuc\_RFP\_SEREdge\_1 & 81.8 & 82.56 & 234.97 & 232.8 \\ 
+  Cyto\_NucCytoBFP\_SERValley\_4 & 12.29 & 12.35 & 8.3 & 8.39 \\ 
+  Nuc\_NucCytoBFP\_SEREdge\_1 & 98.8 & 99.72 & 74.42 & 75.7 \\ 
+  Cyto\_NucCytoBFP\_SERSaddle\_2 & 26.6 & 27.24 & 14.59 & 15.14 \\ 
+  Cell\_RFP\_SERBright\_4 & 6.06 & 6.19 & 9.19 & 9.22 \\ 
+  Cell\_ShapeSize\_MajorAxisLength & 18.76 & 18.73 & 20.32 & 20.16 \\ 
+  Ratio\_Nuc2Cyto\_NucCytoBFP\_MeanIntBC & 2.71 & 2.75 & 2.3 & 2.32 \\ 
+  Cell\_NucCytoBFP\_SERSpot\_1 & 14.04 & 14.19 & 10.14 & 10.3 \\ 
+  Nuc\_GFP\_LogTotalInt & 6.01 & 6.02 & 5.16 & 5.16 \\ 
+  Cell\_NucCytoBFP\_SERBright\_2 & 16.17 & 16.36 & 11.15 & 11.4 \\ 
+  Cell\_ShapeSize\_Compactness & 0.98 & 0.98 & 0.95 & 0.96 \\ 
+  Nuc\_NucCytoBFP\_MeanIntBC & 1103.59 & 1100.3 & 699.1 & 689.22 \\ 
+  Ratio\_Nuc2Cyto\_NucCytoBFP\_TotalInt & 3.74 & 3.86 & 2.2 & 2.3 \\ 
+  Cyto\_NucCytoBFP\_SERSaddle\_1 & 35.69 & 36.46 & 22.15 & 22.74 \\ 
+  Ratio\_Nuc2Cell\_GFP\_MeanInt & 0.94 & 0.95 & 1.03 & 1.04 \\ 
+  Cell\_RFP\_SERSaddle\_4 & 4.6 & 4.61 & 8.46 & 8.44 \\ 
+  Cell\_GFP2RFP\_PearsonCor & 0.34 & 0.34 & 0.55 & 0.56 \\ 
+  Cell\_GFP\_CVIntBC & 0.5 & 0.5 & 0.53 & 0.54 \\ 
+  Cell\_RFP\_TotalIntBC & 210059.07 & 209817.64 & 88398.45 & 87023.99 \\ 
+  Nuc\_ShapeSize\_Compactness & 1.04 & 1.04 & 1.06 & 1.06 \\ 
+  Nuc\_NucCytoBFP\_TotalInt & 471666.13 & 474812.34 & 294540.71 & 292877 \\ 
+  Cell\_NucCytoBFP\_SERBright\_1 & 28.45 & 28.72 & 21.15 & 21.46 \\ 
+  Nuc\_RFP\_StdInt & 112.45 & 113.54 & 99.41 & 100.68 \\ 
+  Cell\_GFP\_SERBright\_4 & 9.97 & 10.17 & 6.84 & 7.08 \\ 
+  Cyto\_GFP\_MeanIntBC & 3999.83 & 3951.73 & 366.56 & 358.09 \\ 
+  Cell\_NucCytoBFP\_SERValley\_4 & 3.05 & 3 & 2.89 & 2.84 \\ 
+  Cell\_GFP\_SERRidge\_1 & 38.68 & 39.36 & 35.77 & 36.47 \\ 
+  Cyto\_RFP\_SERHole\_0 & 104.84 & 105.81 & 147.94 & 149.88 \\ 
+  Cyto\_NucCytoBFP\_SERSaddle\_0 & 61.31 & 62.29 & 48.03 & 48.8 \\ 
+  Cyto\_NucCytoBFP\_LogTotalInt & 5.12 & 5.11 & 5.16 & 5.13 \\ 
+  Cyto\_GFP\_SERValley\_4 & 4.12 & 4.14 & 4.38 & 4.56 \\ 
+  Nuc\_GFP\_LogMeanInt & 3.47 & 3.47 & 2.63 & 2.63 \\ 
+  Cell\_RFP\_SERSpot\_0 & 96.44 & 96.56 & 185.63 & 185.68 \\ 
+  Nuc\_ShapeSize\_Symmetry02 & 0.21 & 0.21 & 0.18 & 0.19 \\ 
+  Nuc\_NucCytoBFP\_CVIntBC & 0.29 & 0.29 & 0.23 & 0.24 \\ 
+  Nuc\_GFP\_SERSpot\_1 & 9.87 & 10.22 & 11.72 & 12.14 \\ 
+  Nuc\_GFP\_CVIntBC & 0.43 & 0.43 & 0.39 & 0.39 \\ 
+  Cyto\_NucCytoBFP\_SEREdge\_0 & 221.99 & 227.11 & 138.64 & 143.32 \\ 
+  Cell\_GFP\_SERValley\_1 & 24.21 & 24.29 & 31.93 & 32.42 \\ 
+  Cell\_GFP\_TotalInt & 2741116.21 & 2731474.94 & 346417.42 & 340295.62 \\ 
+  Ratio\_Nuc2Cell\_RFP\_LogMeanInt & 1.02 & 1.02 & 0.96 & 0.97 \\ 
+  Cyto\_RFP\_SERSaddle\_1 & 27.29 & 27.72 & 62.36 & 62.44 \\ 
+  Cyto\_RFP\_LogMeanIntBC & 2.32 & 2.31 & 2.04 & 2.03 \\ 
+  Cell\_NucCytoBFP\_CVInt & 0.47 & 0.47 & 0.38 & 0.39 \\ 
+  Ratio\_Nuc2Cyto\_NucCytoBFP\_LogMeanIntBC & 1.16 & 1.16 & 1.14 & 1.15 \\ 
+  Nuc\_RFP\_SERHole\_0 & 82.7 & 82.4 & 190.6 & 188.23 \\ 
+  Cell\_GFP\_SERValley\_2 & 10.88 & 10.79 & 12.59 & 12.74 \\ 
+  Cell\_GFP\_SERSaddle\_4 & 5.79 & 5.76 & 4.84 & 4.91 \\ 
+  Cyto\_GFP\_LogTotalIntBC & 5.89 & 5.88 & 5.04 & 5.01 \\ 
+  Cyto\_NucCytoBFP\_SERDark\_4 & 11.86 & 11.87 & 8.41 & 8.46 \\ 
+  Cell\_RFP\_StdInt & 156.1 & 157.2 & 142.6 & 141.55 \\ 
+  Nuc\_GFP\_SERValley\_1 & 30.21 & 29.69 & 29.8 & 29.46 \\ 
+  Cyto\_RFP\_SERSaddle\_2 & 15.18 & 15.52 & 25.97 & 26.17 \\ 
+  Cell\_GFP\_SERSaddle\_0 & 48.64 & 49.35 & 66.59 & 67.03 \\ 
+  Cyto\_RFP\_SERSpot\_4 & 2.05 & 2.04 & 4.32 & 4.32 \\ 
+  Cyto\_GFP\_StdInt & 1395.68 & 1399.56 & 205.38 & 206.37 \\ 
+  Nuc\_GFP\_StdIntBC & 1254.97 & 1266.51 & 149.35 & 150.97 \\ 
+  Cell\_RFP\_CVIntBC & 0.53 & 0.54 & 1.3 & 1.3 \\ 
+  Cell\_GFP\_SEREdge\_4 & 66.83 & 67.01 & 52.33 & 53.36 \\ 
+  Cell\_NucCytoBFP\_SERSpot\_4 & 4.81 & 4.91 & 3.31 & 3.4 \\ 
+  Cyto\_RFP\_SERValley\_0 & 99.53 & 100.71 & 193.34 & 194.36 \\ 
+  Nuc\_GFP\_SERSpot\_0 & 47.26 & 48.46 & 92.93 & 93.51 \\ 
+  Cyto\_RFP\_CVInt & 0.43 & 0.43 & 0.78 & 0.78 \\ 
+  Cell\_NucCytoBFP2RFP\_PearsonCor & 0.47 & 0.48 & -0.07 & -0.05 \\ 
+  Ratio\_Nuc2Cell\_GFP\_TotalInt & 0.54 & 0.55 & 0.51 & 0.53 \\ 
+  Cell\_GFP\_SEREdge\_2 & 106.32 & 107.13 & 91.87 & 93.82 \\ 
+  Cyto\_GFP\_SERSaddle\_2 & 18.16 & 18.58 & 16.35 & 17.08 \\ 
+  Nuc\_NucCytoBFP\_LogTotalInt & 5.6 & 5.6 & 5.41 & 5.41 \\ 
+  Cell\_RFP\_LogTotalIntBC & 5.25 & 5.25 & 4.85 & 4.84 \\ 
+  Cell\_GFP\_SERValley\_0 & 62.33 & 63.22 & 97.73 & 98.43 \\ 
+  Nuc\_GFP\_SERHole\_2 & 11.17 & 10.93 & 7.65 & 7.46 \\ 
+  Cyto\_GFP\_SEREdge\_4 & 85.47 & 87.45 & 68.98 & 72.4 \\ 
+  Cyto\_RFP\_SERSpot\_0 & 100.68 & 100.79 & 186.59 & 186.49 \\ 
+  Nuc\_RFP\_SERSpot\_1 & 11.83 & 12.01 & 25.56 & 26.14 \\ 
+  Nuc\_GFP\_SERRidge\_2 & 17.39 & 17.93 & 14.84 & 15.47 \\ 
+  Cyto\_GFP\_SEREdge\_0 & 232.71 & 239.97 & 218.47 & 225.59 \\ 
+  Cyto\_NucCytoBFP2RFP\_PearsonCor & 0.71 & 0.71 & 0.35 & 0.37 \\ 
+  Cyto\_RFP\_SERBright\_4 & 4.34 & 4.35 & 10.21 & 10.13 \\ 
+  Nuc\_NucCytoBFP\_SERValley\_0 & 39.32 & 39.5 & 44.15 & 44.56 \\ 
+  Cell\_NucCytoBFP\_SERSaddle\_2 & 11.46 & 11.56 & 8.06 & 8.23 \\ 
+  Nuc\_RFP\_SERRidge\_1 & 22.56 & 22.89 & 44.59 & 45.45 \\ 
+  Cell\_RFP\_SERRidge\_0 & 80.65 & 80.83 & 174.62 & 174.55 \\ 
+  Cyto\_NucCytoBFP\_SEREdge\_2 & 163.27 & 167.2 & 91.49 & 95.29 \\ 
+  Nuc\_NucCytoBFP\_SEREdge\_0 & 116.7 & 117.63 & 96.4 & 97.64 \\ 
+  Ratio\_Nuc2Cyto\_GFP\_LogTotalIntBC & 1.02 & 1.02 & 1.01 & 1.02 \\ 
+  Cyto\_NucCytoBFP\_SERSaddle\_4 & 17.95 & 18.44 & 9.52 & 9.95 \\ 
+  Ratio\_Nuc2Cyto\_GFP\_LogMeanIntBC & 0.99 & 0.99 & 1.03 & 1.04 \\ 
+  Cell\_GFP\_SEREdge\_1 & 140.27 & 141.86 & 131.94 & 134.6 \\ 
+  Ratio\_Nuc2Cell\_RFP\_LogTotalInt & 0.96 & 0.96 & 0.92 & 0.92 \\ 
+  Ratio\_Nuc2Cyto\_GFP\_LogMeanInt & 0.99 & 0.99 & 1.02 & 1.03 \\ 
+  Cell\_NucCytoBFP\_SERSaddle\_1 & 17.63 & 17.77 & 13.83 & 14 \\ 
+  Nuc\_RFP\_MeanInt & 465.12 & 466.56 & 146.39 & 148.46 \\ 
+  Cell\_RFP\_SERDark\_0 & 146.36 & 146.37 & 313.79 & 313.68 \\ 
+  Cell\_RFP\_SERSpot\_2 & 5.7 & 5.8 & 11.63 & 11.7 \\ 
+  Cyto\_NucCytoBFP\_SERSpot\_1 & 5.95 & 6.06 & 4.14 & 4.18 \\ 
+  Cell\_ShapeSize\_Perimeter & 94.41 & 94.2 & 104.38 & 103.35 \\ 
+  Cell\_GFP\_SERHole\_1 & 11.51 & 11.54 & 13.41 & 13.35 \\ 
+  Nuc\_RFP\_LogTotalIntBC & 5.05 & 5.05 & 4.37 & 4.38 \\ 
+  Cell\_GFP\_SERRidge\_2 & 20.82 & 21.17 & 16.33 & 16.74 \\ 
+  Cyto\_GFP\_SERSpot\_4 & 3.64 & 3.71 & 2.71 & 2.77 \\ 
+  Cyto\_RFP\_SEREdge\_4 & 69.16 & 70.79 & 65.6 & 66.71 \\ 
+  Nuc\_GFP\_SERHole\_1 & 18.6 & 18.35 & 16.39 & 16.17 \\ 
+  Cyto\_GFP\_SERBright\_1 & 51.48 & 52.13 & 43.78 & 43.73 \\ 
+  Cell\_NucCytoBFP\_SERDark\_1 & 20.05 & 20.04 & 16.86 & 16.83 \\ 
+  Nuc\_RFP\_CVIntBC & 0.33 & 0.33 & 1.29 & 1.27 \\ 
+  Cyto\_GFP\_SERValley\_1 & 31.77 & 32.88 & 46.44 & 49.51 \\ 
+  Cyto\_NucCytoBFP\_LogTotalIntBC & 5.02 & 5.01 & 5.01 & 4.99 \\ 
+  Ratio\_Nuc2Cell\_GFP\_LogMeanIntBC & 0.99 & 0.99 & 1 & 1.01 \\ 
+  Cyto\_NucCytoBFP\_SERSpot\_0 & 64.18 & 64.59 & 75.88 & 76.48 \\ 
+  Cell\_GFP\_SERSpot\_0 & 54.1 & 55.31 & 96.19 & 96.59 \\ 
+  Cyto\_RFP\_SERDark\_1 & 35.03 & 35.9 & 68.14 & 69.11 \\ 
+  Cell\_RFP\_SERValley\_4 & 1.97 & 1.93 & 6.78 & 6.68 \\ 
+  Cyto\_RFP\_MeanIntBC & 237.06 & 233.41 & 134.17 & 130.81 \\ 
+  Nuc\_GFP\_SERBright\_2 & 19.94 & 20.61 & 16.97 & 17.79 \\ 
+  Nuc\_RFP\_SEREdge\_2 & 62.35 & 62.96 & 165.99 & 163.37 \\ 
+  Cell\_RFP\_SERBright\_2 & 14.07 & 14.29 & 29.7 & 29.7 \\ 
+  Cell\_RFP\_CVInt & 0.37 & 0.37 & 0.8 & 0.79 \\ 
+  Cell\_NucCytoBFP\_SERSpot\_0 & 62.58 & 62.8 & 73.23 & 73.76 \\ 
+  Cyto\_GFP\_SERBright\_2 & 26.28 & 26.57 & 19.7 & 19.77 \\   \hline
+\bottomrule
+\end{longtable}
+
+\clearpage
+\begin{landscape}
+\begin{figure}[ht!]
+\begin{subfigure}{1\textwidth}
+\centering
+\includegraphics[width=1.5\linewidth]{snipped_matched_loghotellings_allactivetreats_all_lambdas.PNG}
+\caption*{First data set}
+\end{subfigure}%
+\caption{Boxplots of log(T$^2$) statistics after transformation compared to untransformed cases}
+\label{boxt2}
+\end{figure}
+\end{landscape}
+
+\begin{landscape}
+\begin{figure}[ht!]
+\ContinuedFloat
+\begin{subfigure}{1\textwidth}
+\centering
+\includegraphics[width=1.5\linewidth]{snipped_D2_matched_loghotellings_allactivetreats_all_lambdas.PNG}
+\caption*{Second data set}
+\end{subfigure}%
+\caption{Boxplots of log(T$^2$) statistics after transformation compared to untransformed cases}
+\label{boxt2}
+\end{figure} 
+\end{landscape}
+
+\clearpage
+ \begin{figure}[ht!]
+ \centering
+  \begin{minipage}{.495\textwidth}
+  \centering 
+  \includegraphics[width=1\linewidth]{clipped_matched_hotellings_allactiveTRTS_lambda=10point5.pdf}
+   \subcaption{\textsl{first data set ($\lambda =10.5$)}\label{distt10505a}}
+  \end{minipage}
+ \begin{minipage}{.495\textwidth}
+ \centering
+  \includegraphics[width=1\linewidth]{clipped_matched_hotellings_allactiveTRTS_lambda=11.pdf}
+\subcaption{\textsl{first data set ($\lambda =11$)}\label{distt10505b}}
+ \end{minipage}
+ \begin{minipage}{.495\textwidth}
+ \centering
+\includegraphics[width=1\linewidth]{D2_clipped_matched_hotellings_allactiveTRTS_lambda=0point1.pdf}
+\subcaption{\textsl{second data set ($\lambda =0.1$)}\label{distt10505c}}
+ \end{minipage}
+\begin{minipage}{.495\textwidth}
+\centering
+ \includegraphics[width=1\linewidth]{D2_clipped_matched_hotellings_allactiveTRTS_lambda=0point5.pdf}
+\subcaption{\textsl{first data set ($\lambda =0.5$)}\label{distt10505d}}
+\end{minipage}
+\caption{Distribution of T$^2$ statistics after transformation compared to untransformed cases}
+\label{distt10505}
+ \end{figure}
+
+\clearpage
+\begin{figure}[ht!]
+  \begin{subfigure}[b]{0.5\linewidth}
+  \centering
+\includegraphics[width=1\linewidth]{LOG_matched__hotellings_allactiveTRTS_lambda=8point5.pdf}
+\caption*{Transformation on first data set ($\lambda =8.5$)}
+\vspace{1ex}
+ \end{subfigure}%%
+  \begin{subfigure}[b]{0.5\linewidth}
+  \centering
+\includegraphics[width=1\linewidth]{LOG_matched__hotellings_allactiveTRTS_lambda=10.pdf}
+\caption*{Transformation on first data set ($\lambda =10$)}
+\vspace{1ex}
+ \end{subfigure}%%
+ \\
+   \begin{subfigure}[b]{0.5\linewidth}
+  \centering
+\includegraphics[width=1\linewidth]{D2_LOG_matched__hotellings_allactiveTRTS_lambda=8point5.pdf}
+\caption*{Second data set ($\lambda =8.5$)}
+\vspace{1ex}
+ \end{subfigure}%%
+  \begin{subfigure}[b]{0.5\linewidth}
+  \centering
+\includegraphics[width=1\linewidth]{D2_LOG_matched__hotellings_allactiveTRTS_lambda=10point5.pdf}
+\caption*{Second data set ($\lambda =10.5$)}
+\vspace{1ex}
+ \end{subfigure}%%
+\caption{Distribution of log(T$^2$) statistics after transformation compared to untransformed cases- less effective transformations}
+\label{distt8510log}
+\end{figure}
+
+\clearpage
+\begin{figure}[ht!]
+\centering
+\begin{minipage}{.495\textwidth}
+\centering
+\includegraphics[width=1\linewidth]{snipped_matched_pvalue_hotellings_allactiveTRTS_lambda=10point5.PNG}
+\caption*{First data set ($\lambda= 10.5$)}
+% \label{datastructure}
+\end{minipage}
+\begin{minipage}{.495\textwidth}
+\centering
+\includegraphics[width=1\linewidth]{snipped_D2_matched_pvalue_hotellings_allactiveTRTS_lambda=0point5.PNG}
+\caption*{Second data ($\lambda=0.5$)}
+% \label{datadimension}
+\end{minipage}
+\caption{Effect of transformations on proportion of significant T$^2$ statistics}
+\label{pvalued1}
+
+\end{figure}
+\begin{figure}[ht!]
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{lambda10point5untr_diff_less0point5_trt_combn2.pdf}
+  \caption{}
+  \label{data1prrofa_supplement}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{lambda10point5tr_diff_less0point5_trt_combn2.pdf}
+  \caption{}
+  \label{data1prrofb_supplement}
+\end{subfigure}
+\caption{Treatment profiles before and after transformation (first data set, $\lambda = 10.5$)}
+\label{data1prrof_supplement}
+\end{figure}
+
+\clearpage
+\begin{figure}[ht!]
+\begin{minipage}{.5\textwidth}
+\centering
+\includegraphics[width=1.05\linewidth]{data2_distr_overlaps_pre_post_transformation1_4.PDF}
+\end{minipage}
+\begin{minipage}{.5\textwidth}
+\centering
+\includegraphics[width=1.05\linewidth]{data2_distr_overlaps_pre_post_transformation5_8.PDF}
+\end{minipage}
+\vspace{1mm}
+\begin{minipage}{.5\textwidth}
+\centering
+\includegraphics[width=1.05\linewidth]{data2_distr_overlaps_pre_post_transformation9_12.PDF}
+\end{minipage}
+\begin{minipage}{.5\textwidth}
+\centering
+\includegraphics[width=1.05\linewidth]{data2_distr_overlaps_pre_post_transformation13_16.PDF}
+\end{minipage}
+\caption{Data set 2 - feature distributions before (black line) and after (blue) transformation ($\lambda = 0.5$)}
+\label{distdata2}
+\end{figure} 
+
+%%%%%%%%%%%%%%%%
+
+\clearpage
+\begin{figure}[ht!]
+\begin{minipage}{.495\textwidth}
+\centering
+\includegraphics[width=1\linewidth]{LOG_matched_aggregated_hotellings_allactiveTRTS_lambda=8point5.pdf}
+\subcaption{\textsl{first data set ($\lambda =8.5$)}\label{distt10501_agg1_poor}}
+\end{minipage}
+\begin{minipage}{.495\textwidth}
+\centering
+\includegraphics[width=1\linewidth]{LOG_matched_aggregated_hotellings_allactiveTRTS_lambda=10.pdf}
+\subcaption{\textsl{first data set ($\lambda =10$)}\label{distt10501_agg2_poor}}
+\end{minipage}
+
+\begin{minipage}{.495\textwidth}
+\centering
+\includegraphics[width=1\linewidth]{D2_LOG_matched_aggregated_hotellings_allactiveTRTS_lambda=8point5.pdf}
+\subcaption{\textsl{second data set ($\lambda =8.5$)}\label{distt10501_agg3_poor}}
+\end{minipage}
+\begin{minipage}{.495\textwidth}
+\centering
+\includegraphics[width=1\linewidth]{D2_LOG_matched_aggregated_hotellings_allactiveTRTS_lambda=10point5.pdf}
+\subcaption{\textsl{second data set ($\lambda =10.5$)}\label{distt10501_agg4_poor}}
+\end{minipage}
+\caption{Distribution of T$^2$ statistics comparing untransformed, cell and well level performance}
+\label{distt10501_agg_poor}
+\end{figure}
+
+\clearpage
+\begin{figure}[ht!] % 
+\centering
+\begin{minipage}{.495\textwidth}
+\centering
+\includegraphics[width=1\linewidth]{aggregated_auc8point5.pdf}
+% \caption*{First data set ($\lambda = 10.5$)}
+\subcaption{\textsl{First data set ($\lambda =8.5$)}\label{agg_allbox1_poor}}
+\end{minipage}
+\begin{minipage}{.495\textwidth}
+\centering
+\includegraphics[width=1\linewidth]{aggregated_auc10.pdf}
+\subcaption{\textsl{First data set ($\lambda =10$)}\label{agg_allbox2_poor}}
+\end{minipage}
+
+\begin{minipage}{.495\textwidth}
+\centering
+\includegraphics[width=1\linewidth]{D2_aggregated_auc8point5.pdf}
+\subcaption{\textsl{Second data set ($\lambda =8.5$)}\label{agg_allbox3_poor}}
+\end{minipage}
+\begin{minipage}{.495\textwidth}
+\centering
+\includegraphics[width=1\linewidth]{D2_aggregated_auc10point5}
+\subcaption{\textsl{Second data set ($\lambda =10.5$)}\label{agg_allbox4_poor}}
+\end{minipage}
+\caption{Boxplots of AUC values across runs for transformed, cell and well level transformed data}
+\label{agg_allbox_poor}
+\end{figure}
+
+\clearpage
+\subsection{CODES}
+\begin{verbatim}
+
+\end{verbatim}
+
+\end{document}
+
+%%% THZ PART IS SAVED JUST INCASE IT'S NEEDED
+\section{Background of the study} \label{background}
+\subsection{Introduction to variance stabilizing transformations and image-based compound profiling features}\label{intro_vst_cpd}
+\par{Variance Stabilizing Transformations (VST) are data transformation techniques primarily aimed at transforming data so that simple methods like linear regression and analysis of variance can subsequently be applied without violating underlying assumptions. Key amongst these assumptions is the requirement for independence between the mean and variance of the data, which, similar to what is observed in gene expression data cases, is a relationship that is rarely respected in high content imaging data \cite{haney2014rapid}. VST are also applied to enable simplified graphical data exploration. Common VST methods include auto-scaling, Pareto scaling \cite{VandenBerg2006}, Yeo-Johnson power transformations \cite{yeo2000, Weisberg2001} and generalized log transformation (glog) \cite{Huber2002, durbin2002variance, Rocke2003, Munson2001, Rocke2001}. }
+
+\par{Image-based multi-parametric  compound profiling on the other hand is an important biological screening method for compounds in the drug discovery chain using a range of features extracted from image-based assays using High Throughput Microscopy (HTM) \cite{Price2002, Lin2007,Reisen2015}. In HTM, a cell is identified by portioning the image into regions using a computer image analysis algorithm. These cellular regions then provide information on the intensity, texture and spatial distribution of intracellular biomarkers as well as the shape, quantity and geometry of cells.}
+
+\par{The increased interest to multi-parametrically characterize compounds at an early stage is driven by the need to understand how compounds induce their desired properties and describe their mechanisms of action, how to preferentially identify highly specific compounds from a pool of compounds that have a considerable activity on  isolated biological target molecules and how to identify as early as possible any likely undesired effects (for instance toxicity detection) of the compounds on the cells and cellular activity \cite{Lang2006,Reisen2015,Perlman2004}. Multi-parametric  compound profiling methods, unlike univariate methods, factor in possible dependencies among features and often lead to a more precise characterization, comparison and prediction of compound effects on cells \cite{Loo2007}.}
+
+\par{In most cases, features extracted from images as listed above have highly skewed distributions making direct analysis on them using gaussian-based analysis methods inappropriate. Further, most multivariate techniques for assessing possible relationships amongst groups, samples and/or compounds are highly dependent on the variability in the data \cite{wichern2007, Parsons2007} which necessitate appropriate handling of the data's variance structure. Briefly, variation between a pair of samples can be categorized as either 'technical' or 'biological' \cite{Churchill2002,VandenBerg2006,Parsons2007} with technical variability being associated with procedures performed during the experiment for instance sample preparation, extraction, labeling and analytical measurements while biological variability refers to the intrinsic differences due to genetic composition of experimental units within a sample.}
+
+\par{To effectively differentiate between samples, the blurring effect of technical variability needs to be minimized while concurrently maximizing the role played by biological differences. Variance stabilizing transformations and other data pre-processing procedures are often used to alter the variance structure and particularly reduce the role of technical variability \cite{Churchill2002,VandenBerg2006,Parsons2007,Purohit2004} in multivariate analysis on which sample discrimination is based. Thus, VST has a double knock-on effect when applied to this kind of skewed data. Firstly, it aids in handling the likely skewness observed in the distribution of the aforementioned image-derived features, and secondly, it maximizes the role of biological variability in samples' discrimination while minimizing the role of technical variation.}
+
+% \subsection{VST status}\label{vst_statistics}
+% \par{Common VSTs used, from the bigger picture (auto-scaling, pareto scaling, glog etc) in imaging}
+%
+% \subsection{Image-based compound profiling features}\label{image_based_cpd_statistics}
+% \par{the image-based compound profiling features, there successess, need, where have they been applied and to what level of success etc}
+
+\subsection{Objectives}\label{objectives}
+% \par{The primary objective of this study was to separate replicates of a treatment from replicates of other treatments on two disparate cell-line datasets (Colon-CytoSkeleton-Endosomes and Hepa-ER-Mito) using the multivariate Hotelling's T$^2$ statistic and Area under the Curve (AUC) analysis methods. Further, the study aimed at comparing the performance of the two analysis methods.}
+\par{The primary objective of this study was to investigate the effects of variance stabilizing transformation(s) on the separation of treatment replicates from non-replicates on high content imaging data. A treatment was defined as a candidate compound at a specific concentration. Treatment replicates refer to individual samples of the same treatment, whereas non-replicates are individual samples of different treatments. Further, the effect of variance stabilizing transformations on the proportion of treatments determined as active or inactive was investigated. Investigations were also done to determine whether the transformations resulted in better treatment discrimination when performed at single-cell level or after aggregating at well level.}
+
+\clearpage
+\subsection{Motivations for the study}\label{study_motivation}
+\par{Multiparametric  high content imaging is a rich tool in the research, discovery and characterization of compounds at an early stage in the drug discovery pipeline \cite{Price2002, Lang2006, Loo2007, Lin2007}. This early stage discovery is important in identification and/or confirmation of compounds with a desired effect(s) on cells, in predicting a compound's mechanism of action, early detection of toxicity and other undesired effects, and improvement in selection of untested compounds in targeted assays by comparing their multi-variate imaging profiles to those of hits and non-hits \cite{Reisen2015, Perlman2004}. The improved identification of additional hit compounds consequently implies a lower cost per hit identified. However, due to the unconventional nature of the features' distributions, analysis based on these features is often compromised since conventional multivariate analysis methods are based on gaussian underlying assumptions\cite{wichern2007, Parsons2007}. The non-normality of the feature-distributions implies that the respective means are related to their variance through some function \cite{Rocke2001,Huber2002,haney2014rapid} and that their variances are possibly littered with an undesired high proportion of technical variability \cite{Churchill2002,VandenBerg2006,Parsons2007}. These factors reduce the differentiating ability of using the multi-parametric  image-based features to differentiate replicates of treatments from non-replicates.}
+
+\par{In order to maximally discriminate treatment replicates from non-replicates using this powerful multi-parametric  approach therefore, variance stabilizing transformations may aid in improving subsequent analyses of the data. In this report, we investigated the effect of a range of glog transformations on the separation between replicates of a treatment from non-replicates, whether there were important effects of these transformations on the proportion of treatments that were concluded as active or inactive and lastly determined the optimality of performing the transformation on single-cell and aggregated well-level data.}
+
+\par{\textit{It is our belief that establishing the effect of the transformation on the separation between treatment replicates and non-replicates is vital especially when reliable differentiation of treatments is hampered by factors that are not driven by the mechanism of action of the treatments themselves but inadequacies in the form of the data used. We note that differentiating treatments comes in the form of treatments of the same compound at different concentrations, treatments of different compounds at the same concentration or treatments of different compounds and at different concentrations. Similar outcomes have also been investigated in \cite{Reisen2015, Perlman2004}. Further, that the resulting transformed-data can be used in subsequent analyses using usual analysis methods was welcoming given that subsequent users of the transformed data would not have to worry about the need to perform transformations and/or apply complex methods in their analyses. This is because the transformation is aimed at ensuring that the data is 'normal' and simple gaussian-based methods are therefore applicable. With the transformations also establishing their effect on the proportion of treatments concluded as active or inactive, we were able to comprehensively show the transformational effect on the proportion of treatments concluded as active. Such a refined approach to identification of effective treatments implies that we are able to exhaustively identify active treatments, some of which would not be identified as a result of the nature of the analyzed data and not because they are not effective.}}
+
+% \par{While various variance stabilizing transformations exist, this report was specifically designed to assess the effect of using generalized log transformation (glog) on the separation of replicates of treatments from non-replicates on two disparate high content imaging datasets. }
+
+\clearpage
+\section{Literature review}\label{lit_review}
+
+\par{In their quest for linkage between phenotypes and modes of action of compounds through high-content (HCS) screen fingerprints, \cite{Reisen2015}, the authors showed that there is a strong ability of using sets of features to biologically characterize compounds. They note that clustering and classification using multiple cellular features across sets of compounds helps in the identification of compounds with similar modes of action. They developed methods based on clustering and correlation among features for each of the respective compounds that established the linkage between the sets of phenotypes and the modes of action for the compounds by analyzing the gene sets and individual targets within each cluster. They were able to show that using a richer set of features was vital in discriminating between phenotypes induced by different compounds. They conclude that a multi-parametric -based compound profiling approach easily permits one to link treatment-induced cellular phenotypes to a compound's mode of action. Additionally, they show that detecting similarities between treatments was not entirely dependent on chemical similarities and that it is viable to predict modes of action of a treatment by examining its multi-feature profiles relative to ones observed for hit or non-hit treatments. }
+
+% \par{\cite{Loo2007}}
+\par{Analysis on similar data as the one used in this project was conducted aimed at developing a method to systematically analyze genetic interactions of epigenetic regulators  in human colon cancer cells using combinatorial RNAi and high-throughput phenotypic imaging   \cite{Laufer2013}. To construct genetic interaction profiles, they tested each of the genetic regulators  against a pre-defined subset of genes. The subset of genes was selected so as to maximize
+on a number of factors using the principal-component analysis (PCA). Further, to determine non-redundant features, a stepwise selection method based on linear decomposition was used and a feature with the highest signal to noise ratio \cite{Johnson2006}, quantified using correlation amongst replicates, was
+selected. Conclusions were drawn by examining the interaction score \cite{Mani2008} and associated moderated t-test statistic \cite{Smyth2004}.
+%  In the current study, we seek to approach the feature selection using a competing methodology by selecting features that have a high ability to influence the classifying variable while concurrently minimizing the correlation with other selected features. We also completely avoid using PCA as a multivariate approach to evaluating possible
+% relationships since it is highly dependent on variability that may be inefficient due to artefactual technical variability.
+The study determined that genetic interactions were specific for phenotypic features and that genetic interactions between phenotypic features associated with a particular cellular compartment were higher than that for between phenotypic features for disparate compartments. They also conclude that the single-cell multi-parametric  phenotyping was effective in limiting experimental artefacts in succeeding analyses and provides a rich-source of genetic interactions.}
+
+\par{In their study on the effect of variance stabilizing transformations on the classification accuracy on nuclear magnetic resonance (NMR) metabolomics data \cite{Parsons2007}, the authors investigate the effect of glog transformation and its modified version, the extended glog transformation, on the classification ability as compared to traditionally used stabilizing transformations- auto-scaling and pareto scaling. Three dissimilar datasets were used to highlight the broad application of the glog transformation. PCA was initially performed, then followed by Fisher's linear discriminant analysis (LDA) \cite{Johnson2006} on the first and second principal components of the PCA scores-plot that determined the decision region. The effect of the transformations on each of the data was investigated via classification statistics calculated from the decision regions. It was shown that the variance stabilizing ability using the glog transformation was better compared to the unscaled, auto-scaling and pareto scaling all of which led to modifications of the variance structure with differing degrees of success.
+The success of the glog transformation is associated with its ability to minimize the technical variability among technical replicates, a strength that the other transformations lack. An extension of the glog, the extended glog transformation, was highly successful in suppressing some of the remnant data problems and led to better classification. Our study adopts this glog approach and further investigates these conclusions on the effectiveness of the glog transformation, and additionally, establishes whether the transformation is better applied at single-cell level or as aggregated data at well level. }
+
+\par{The study on discriminating models using variance stabilizing transformation of metabolomic NMR data, \cite{Purohit2004}, demonstrated the effectiveness of using the glog transformation in multivariate classification of the abalone into the healthy, stunted and diseased categories. They used PCA methods both as a dimension-reduction technique and as a primary method to explore separation among the different groupings in abalone dataset. The PCA was then followed by hierarchical clustering, performed on both transformed and untransformed data. They found out that for untransformed case, a portion of the data (the healthy subgroup) was effectively separated  from the other subgroups, while there was overlap between the stunted and diseased groups. Expectedly, the groups did not cluster into three groupings on performing hierarchical cluster analysis. However, after transformation, the scores plot showed clear separation into three subgroups according to an underlying morphologic assessment. Additionally, hierarchical cluster analysis revealed three clear clusters as expected. This improvement in classification and interpretation of clusterings was attributed to the glog transformation. }
+
