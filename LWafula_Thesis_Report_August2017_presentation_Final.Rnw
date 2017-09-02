@@ -1,0 +1,301 @@
+
+\documentclass[11pt]{beamer}
+\mode<presentation>
+\usepackage{tikz}
+\usepackage{siunitx}
+\usepackage{subfig}
+\usetikzlibrary{arrows}
+\tikzstyle{block}=[draw opacity=0.7,line width=1.4cm]
+\usepackage{gensymb}
+\usepackage{Sweave}
+\usepackage{pdflscape}
+\usepackage{tabularx}% <-- added
+\usepackage{textcomp}
+%\usefonttheme{serif} 
+\usefonttheme{professionalfonts} 
+\usetheme{Madrid}
+\usecolortheme{beaver}
+\setbeamertemplate{navigation symbols}{}
+\defbeamertemplate*{footline}{shadow theme}{%
+ \ifnum \insertpagenumber=1
+      \leavevmode%
+      \hbox{%
+      \begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex,center]{}%
+       
+      \end{beamercolorbox}}%
+      \vskip0pt%
+    \else
+\leavevmode%
+\hbox{\begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.3cm plus1fil,rightskip=.3cm]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\hfill\insertshortauthor
+\end{beamercolorbox}%
+
+\begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.3cm,rightskip=.3cm plus1fil]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle\hfill%
+\insertframenumber\,/\,\inserttotalframenumber
+\end{beamercolorbox}}%
+\vskip0pt%
+  \fi
+}
+\title[VST for image-based compound profiling features]{Variance Stabilizing Transformations for image-based compound profiling features}
+\author{LEonard Wafula}
+\vspace{2cm}
+% \date{August 01, 2017}
+\date{\today}
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+\begin{frame}{Introduction}
+% \textbf{\underline{Image-based multi-parameteric compound profiling features}} \\ 
+% \vspace{2mm}
+$\Box$ Proxy biological method for distinguishing compounds using a range of features extracted
+from image-based assays \\ \vspace{4mm}
+$\Box$ The features provide information on \\
+\begin{enumerate}[i.]
+\item{intracellular biomarkers: texture, intensity, spatial distribution ...}
+\item{cells: shape, geometry, quantity .. .}
+\end{enumerate}
+$\Box$ Why
+\begin{enumerate}[i.]
+\item{describe \& predict a compound's mechanism of action}
+\item{preferentially identify highly specific compounds having desirable effect(s) on a given biological target}
+\item{early detection of undesired compound effects on cells + cellular activity: toxicity}
+\end{enumerate}
+\vspace{4mm}
+\end{frame}
+
+\begin{frame}{.. introduction}
+It's all good, but .... Most of these features often \\
+\begin{enumerate}[$\blacktriangleright$]
+ \item are highly correlated: need to limit features used for analysis \\
+\item have non-normal distributions: mean-variance relationship present
+\begin{itemize}
+\item multivariate classification methods hugely depend on variance
+\item {\includegraphics[scale=0.25]{variability.PNG}}
+\end{itemize}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Aim of the analysis}
+To assess the:
+\begin{enumerate}[I. ]
+\item effect of glog transformation on separation of treatment replicates from non-replicates
+\item \textit{effect of glog transformation on proportion of actively-called treatments}
+\item \textit{performance of a glog transformation on treatments separation when applied at cell- or well-level}
+\end{enumerate} 
+\vspace{4mm}
+$\clubsuit$ Treatment: a compound at a given concentration (a compound can have 4 or 5 concentration levels - \SI{1}{\micro M} (microMolar), \SI{3}{\micro M}, \SI{3.34}{\micro M}, \SI{9}{\micro M} and \SI{11.1}{\micro M})
+\end{frame}
+
+\begin{frame}{Data, the glog transformation and data pre-processing}
+       \begin{columns}
+          \column{0.45\textwidth}
+           \textcolor{black}{\underline{Data}} \\ \vspace{3mm}
+         $\diamondsuit$ cancer cell lines: Liver \& Colon \\ \vspace{3mm}
+         $\diamondsuit$ 3 batches @ 18 plates \\
+           \vspace{3mm}
+         \centering
+        \includegraphics[scale=1]{cellwellblack.png}
+        \column{0.55\textwidth}
+       $\diamondsuit$ Number of cells \\ \vspace{3mm}
+       \begin{enumerate}[a. ]
+       \item plate: btwn 134909 \& 281177 (152679 \& 330117) in $1^{st}$($2^{nd}$)
+       \item well: 73 \& 1812 (95 \& 2120) in $1^{st}$($2^{nd}$)  
+       \end{enumerate}
+        $\diamondsuit$ 311 compounds including control \\ \vspace{3mm}
+       $\diamondsuit$ total of 1253 treatments \\ \vspace{3mm}
+        $\diamondsuit$ 462 features extracted from each cell 
+         \end{columns}
+\end{frame}
+
+\begin{frame}{..Data, the glog transformation and data pre-processing}
+       \begin{columns}
+          \column{0.5\textwidth}
+             \textcolor{black}{\underline{Glog transformation }}
+\begin{enumerate}[$\Rsh$]
+\item formula\\
+\begin{equation*}
+\begin{split}
+z=\mbox{Log}(y-\alpha+\sqrt{(y-\alpha)^2+\lambda})
+\end{split}
+\end{equation*}
+\item where
+\begin{enumerate}[$\bullet$]
+% \item z: glog-transformed data
+% \item y: untransformed data
+\item $\alpha$: feature mean across controls
+\item $\lambda$: transformation parameter
+\end{enumerate}
+\end{enumerate}
+             \textcolor{black}{\underline{Data pre-processing}}
+             \begin{enumerate}[$\Rsh$]
+\item Aggregation - calculating mean for each feature per well
+\vspace{2mm}
+\item Normalization - 
+$$\frac{\mbox{feature}_{value}-\mbox{mean.feature}_{DMSO}}{\mbox{pooled.SD.feature}_{across.plates}}$$
+\end{enumerate}
+\column{0.5\textwidth}
+\begin{enumerate}[$\Rsh$]
+\item Feature selection 
+\begin{enumerate}[$\bullet$]
+\item MRMR \cite{Peng2005}: identify set of features with low pairwise correlation \& high reproducibility among replicates.
+\item [ ]
+\item AUC value for btwn 2-75 features
+\item [ ]
+\item optimal feature: maximizes separation of treatment replicates within 1 std error of AUC
+\item [ ]
+\end{enumerate}
+\item Active calling: treatments with $\ge 50$\% active replicates
+\end{enumerate}
+ \end{columns}
+\end{frame}
+
+\begin{frame}{Methodology}
+\begin{columns}
+\column{0.5\textwidth}
+$\star$ \underline{Hotelling's T$^{2}$ method}
+\begin{enumerate}[$\leadsto$]
+\item measures difference in 2 multivariate means
+\item formula \\
+\begin{flushleft}
+\begin{equation*}
+\begin{split}
+T^2 =
+\frac{(\mathbf{\bar{X}}_1-\mathbf{\bar{X}}_2)\prime(\mathbf{\bar{X}}_1-\mathbf{\bar{X}}_2)}{\boldsymbol{S}_p(\frac{1}{n_1}+\frac{1}{n_2})}
+\end{split}
+\end{equation*}
+\end{flushleft}
+\item normality assumptions for optimal results
+% \item only actively-called treatments in pre- \& post-transformation used
+% \item + shift in T$^2$ distribution indicate improved treatment separation
+\item [ ]
+\item [ ]
+\item [ ]
+% \item [ ]
+\item [ ]
+\end{enumerate}
+\column{0.5\textwidth}
+$\star$ \underline{AUC method} \\
+2-steps involved in AUC-calculation
+\begin{enumerate}[$\leadsto$]
+% \item Pearson correlation btwn pairs of replicates (\& non-replicates) were calculated \& distributions plotted
+\item {\includegraphics[scale=0.25]{replicatesvsnonreplicates_run_8_for_lambda10.PDF}}
+\item [ ]
+\item separation btwn distributions quantified [ROC curve + AUC]
+% \item transformations leading to higher AUC values $\dashrightarrow$ improved treatments separation compared to corresponding untransformed data
+\end{enumerate}
+\end{columns}
+\end{frame}
+\begin{frame}{Results:  EDA}
+\begin{tabular}{ p{.2\textwidth}  p{.15\textwidth}  p{.15\textwidth} }
+\multicolumn{3}{l}{No. of replicates (\% of sample treatments)}\\   
+9 (\%) & 36 (\%) & 45 (\%) \\ \hline
+1192 (95.208) & 28 (2.236) & 32 (2.556) \\
+\end{tabular}
+\vspace{3mm}
+\begin{enumerate}[$\bigstar$]
+\item DMSO control replicated across 1512 wells
+\item [ ]
+% \item For both data sets
+\item Implications \\
+\begin{enumerate}[$\star$]
+\item For calculation of Hotelling's T$^2$, a limited number of selected features was used to maximize its power
+\item 10 highest ranked features from MRMR used to calculate T$^2$
+\end{enumerate}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Results: Transformations effects on treatments separation}
+\underline{Prologue} \\ \vspace{3mm}
+$\diamond$ Only glog transformations [$\lambda$ =0.1 \&, 0.5 - 25 at 0.5 interval] \\ \vspace{5mm}
+$\diamond$ Each transformed compared to its corresponding untransformed data defined by overlapping actively-called treatments\\ \vspace{5mm}
+$\diamond$ Improved separation: +ve shifts distribution (and/or higher) of T$^2$ (AUC) for transformed compared to untransformed means  \\ \vspace{5mm}
+ $\diamond$ 1$^{st}$ cell line
+\end{frame}
+
+\begin{frame}{Transformations effects on treatments separation - T$^2$}
+\hspace{-2.5mm} $\divideontimes$ very high [very different] + very low [highly similar] values present \\ \vspace{3mm}
+\begin{columns}
+\column{0.5\textwidth}
+$\divideontimes$ others led to no improvements (e.g $\lambda = 10$)
+\includegraphics[width=1\linewidth]{LOG_matched__hotellings_allactiveTRTS_lambda=10.pdf}
+\column{0.5\textwidth}
+$\divideontimes$ some led to slight but non-significant improvements %(e.g $\lambda = 10.5$)
+\includegraphics[width=1\linewidth]{LOG_matched__hotellings_allactiveTRTS_lambda=10point5.pdf}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Transformations effects on treatments separation - AUC}
+\begin{columns}
+\column{0.65\textwidth}
+\includegraphics[width=.95\linewidth]{matched_auc_all_lambdas.pdf}
+\column{0.35\textwidth}
+\begin{enumerate}[ ] 
+\item \hspace{-1cm} $\bullet$ high AUC b4-transformation
+\item \hspace{-1cm} $\bullet$ some (e.g $\lambda = 5.5$) \\ \hspace{-1cm} separated slightly poorer
+\item \hspace{-1cm} $\bullet$ others (e.g $\lambda = 0.1$) \\ \hspace{-1cm} led to marginal increases  
+\item \hspace{-1cm} $\bullet$ differences were \\ \hspace{-1cm} minimal \& non-significant
+\end{enumerate}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Transformations effects on treatments separation- Epilogue}
+\begin{flushleft}
+$\diamond$ In both methods, minimal \& non-significant differences were observed  \\ \vspace{6mm} 
+$\diamond$ Why? \\ \vspace{1mm}
+\end{flushleft}
+\end{frame}
+
+\begin{frame}
+\underline{1. Transformation effect on features distributions ($\lambda = 10.5$)} \\
+\centering
+\includegraphics[height=8.5cm,width=9cm]{data1_distr_setdiff_pre_post_transformation_9to12.PDF}
+\end{frame}
+
+\begin{frame}
+\underline{2. Differentiating ability of features selected (before transformation)} \\
+\begin{columns}
+\column{0.5\textwidth}
+  \centering
+\includegraphics[scale=0.45]{EDA_minimal_diffTRT.PDF}
+\column{0.5\textwidth}
+  \centering
+  \includegraphics[scale=0.45]{EDA_maximal_diffTRT.PDF}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Conclusion}
+$\thicksim$ Transformations did not improve treatments separation beyond what was seen pre-transformation 
+\end{frame}
+
+\begin{frame}{Acknowledgement}
+\begin{columns}
+\column{0.5\textwidth}
+\textbf{\underline{Supervisors}} \\
+\begin{enumerate}[$\bullet$]
+\item Prof. Dr. Ziv SHKEDY
+\item Prof. Dr. Nolen Joy PERUALILA
+\item Dr. Marjolein CRABBE
+\item Dr. Steffen JAENSCH
+\end{enumerate}
+\flushleft
+\includegraphics[scale=0.45]{VLIRous.PNG}
+\column{0.5\textwidth}
+\flushright
+\includegraphics[scale=0.45]{UHasseltlogo.JPG} \\
+\flushright
+\includegraphics[scale=0.45]{logo_janssenpharmaceutica.jpg}
+\end{columns}
+\end{frame}
+\begin{frame}
+\frametitle{References}
+\bibliographystyle{IEEEtran}
+\bibliography{vst_ref}
+\end{frame}
+\SweaveOpts{concordance=TRUE}
+
+\end{document}
